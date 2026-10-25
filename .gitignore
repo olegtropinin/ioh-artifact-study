@@ -1,0 +1,5 @@
+.venv/
+data/
+.claude/progress/
+out/cache/
+__pycache__/

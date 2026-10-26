@@ -49,8 +49,8 @@ Our study adds:
 - a test for differential error.
 
 We agree with both on duration-based exposures. Unlike Pasma et al., we found that the
-7-point median distorts exposure substantially, even when the ratio of odds ratios stays near
-1. The AWAKE trial showed that the monitoring method changes measured and treated hypotension
+7-point median distorts exposure substantially, even when the ratio of odds ratios stays
+near 1. The AWAKE trial showed that the monitoring method changes measured and treated hypotension
 at induction.[@kouz] Our resolution results are the retrospective counterpart.
 
 Wax et al.[@wax] and a recent preprint from the MOVER cohort[@liu] treated disagreement between

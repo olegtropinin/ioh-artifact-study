@@ -45,7 +45,7 @@ if __name__ == '__main__':
         S[label] = res
     # without log duration: rebuild the full set minus the duration column
     c2 = c.copy()
-    c2['ane_dur_h'] = c2.ane_dur_h.median()
+    c2['log_dur'] = c2.log_dur.median()      # covariates() uses log_dur; a constant column is dropped below
     Znd = covariates(c2)
     Znd = Znd[:, np.ptp(Znd, 0) > 0]
     e = A.expo(c, 'ref', 'bridged', 'R3', 0, 65, 'binary')

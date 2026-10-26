@@ -1,0 +1,39 @@
+{
+ "site": {
+  "other": {
+   "n": 67,
+   "pre": 0.12947027025279897,
+   "other": 0.02829728615389333,
+   "share_pts_pre_ge10": 0.417910447761194
+  },
+  "pedal/femoral": {
+   "n": 58,
+   "pre": 0.09660751582782202,
+   "other": 0.033718255313073646,
+   "share_pts_pre_ge10": 0.3275862068965517
+  },
+  "radial": {
+   "n": 2219,
+   "pre": 0.13947484286623943,
+   "other": 0.01802472848116421,
+   "share_pts_pre_ge10": 0.49797205948625506
+  }
+ },
+ "side": {
+  "Left": {
+   "n": 747,
+   "pre": 0.08897102672300176,
+   "share_pts_pre_ge10": 0.30522088353413657
+  },
+  "Right": {
+   "n": 1472,
+   "pre": 0.16510415717262433,
+   "share_pts_pre_ge10": 0.5957880434782609
+  }
+ },
+ "mannwhitney_radial_vs_pedal_femoral_excess": {
+  "U": 80957.0,
+  "p": 0.0007808707620115667
+ },
+ "note": "per-patient means of the artefact fraction in the 60 s before cuff readings (pre) and at other times (other); share_pts_pre_ge10: share of patients whose pre-cuff windows were >= 10% artefact"
+}

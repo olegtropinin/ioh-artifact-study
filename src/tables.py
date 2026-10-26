@@ -170,13 +170,18 @@ def supplementary():
             'hypertensive min/h; d_mechanism terms 1–3: blood gases/h, log blood loss, red-cell units. lo/hi per SD; '
             'lo_u/hi_u per unit of log(1 + min/h).\n']
     dsc = st['discordant']
+    byk = json.load(open(os.path.join(PH, 'ror_by_k.json')))
+    pb = byk[-1]['poisson_binomial_up']
     rows = [dict(pipeline=k, up=v['up'], aki_up=v['aki_up'], down=v['down'], aki_down=v['aki_down'])
             for k, v in dsc.items() if isinstance(v, dict) and 'up' in v]
     out += ['## Table S7. Discordant patients, operating characteristics of the equivalence decision, and interval coverage\n',
             md(pd.DataFrame(rows)),
             f"\nF1 × R3: expected AKI among the 33 discordant patients {dsc['F1xR3_expected_aki']:.2f}; "
-            f"probability of none {dsc['F1xR3_p_k0']:.2f}. ROR if k of the 28 upward-moved patients had AKI: "
-            + ', '.join(f'k = {k}: {v:.2f}' for k, v in dsc['F1xR3_ror_by_k_up_cases'].items()) + '.\n',
+            f"probability of none {dsc['F1xR3_p_k0']:.2f}.\n",
+            md(pd.DataFrame([r for r in byk if 'k' in r])),
+            '\nROR and A15 interval if k of the 28 upward-moved patients had developed AKI (outcomes swapped with k '
+            'concordant cases; 400 bootstrap resamples, 200 permutations). Under the reference model, '
+            f"P(k = 0) = {pb['p_k0']:.2f}, P(k = 1) = {pb['p_k1']:.2f}, P(k ≥ 2) = {pb['p_k_ge2']:.2f}.\n",
             md(pd.DataFrame([dict(scenario=k, **v) for k, v in tost.items() if isinstance(v, dict) and 'n' in v])),
             '\nSimulated outcomes from the fully adjusted reference model; differential error added as a log-odds '
             'shift γ in upward-moved patients. Each dataset analysed with the A15 rule (200 bootstrap resamples, '

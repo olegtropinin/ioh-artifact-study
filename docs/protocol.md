@@ -351,3 +351,10 @@ between right and left radial catheters, prompted by the C3 result.
   restriction, disease-risk-score adjustment, crude-to-adjusted OR ladder, real-time episode
   table, pulse oximetry during deep episodes, cuff subtype/regularity/position, rule
   performance by nadir, injection sweep.
+
+**Round-2 review changes (2026-10-26).** A coding error in the post hoc "without duration" model
+(`posthoc_models.py` fixed `ane_dur_h` instead of the `log_dur` column the model uses) was
+corrected; the corrected estimate is 1.10 (0.70–1.71). The A11 rule is reported as the
+single split selected by the tree search. "Artefact" in the text denotes waveform-flagged
+values (A1). The fragility of the primary verdict to AKI among the discordant patients was
+quantified post hoc (`src/posthoc_k.py`).

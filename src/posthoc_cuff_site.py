@@ -28,3 +28,15 @@ if __name__ == '__main__':
                                                      share_ge10=share).round(3))
     print(mannwhitneyu(x[x.site == 'radial'].excess, x[x.site == 'pedal/femoral'].excess))
     x.to_csv(os.path.join(ROOT, 'out', 'descriptive', 'c3_by_site.csv'))
+    import json
+    site = x.groupby('site').agg(n=('art_pre_nibp', 'size'), pre=('art_pre_nibp', 'mean'),
+                                 other=('art_else', 'mean'), share_pts_pre_ge10=share)
+    side = x[x.site == 'radial'].groupby('side').agg(n=('art_pre_nibp', 'size'), pre=('art_pre_nibp', 'mean'),
+                                                     share_pts_pre_ge10=share)
+    mw = mannwhitneyu(x[x.site == 'radial'].excess, x[x.site == 'pedal/femoral'].excess)
+    with open(os.path.join(ROOT, 'out', 'posthoc_review', 'cuff_site.json'), 'w') as fh:
+        json.dump(dict(site=site.to_dict('index'), side=side.to_dict('index'),
+                       mannwhitney_radial_vs_pedal_femoral_excess=dict(U=float(mw.statistic), p=float(mw.pvalue)),
+                       note='per-patient means of the artefact fraction in the 60 s before cuff readings (pre) and '
+                            'at other times (other); share_pts_pre_ge10: share of patients whose pre-cuff windows '
+                            'were >= 10% artefact'), fh, indent=1)

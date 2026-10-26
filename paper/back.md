@@ -1,18 +1,14 @@
 ## Conclusions
 
-Arterial-line artefacts were frequent events but a small part of recorded hypotension. In this
-cohort, ≥ 10 min of MAP below 65 mmHg was not independently associated with AKI. With
-per-minute medians and a range filter, artefact handling neither created nor removed an
-association, and artefact was not recorded preferentially in patients who developed AKI.
+Arterial-line artefacts were frequent events but a small part of recorded hypotension. With
+per-minute medians and a range filter, artefact handling did not detectably change the
+association between hypotension and AKI. We found no evidence that artefact was recorded
+preferentially in patients who developed AKI, although the equivalence verdict rested on few
+discordant patients.
 
-Investigators should:
-- avoid running-median smoothing;
-- avoid unfiltered area-based exposures;
-- report resolution as carefully as thresholds.
-
-A brief, very deep recorded fall is often artefact. It should prompt an immediate look at the
-waveform, not a delay in treatment. Arterial artefact clusters in the cuff cycle, consistent
-with occlusion of the cannulated arm.
+Running-median smoothing and unfiltered area-based exposures distort measured hypotension.
+Brief, very deep recorded falls are often artefact in retrospect, but a sudden fall should
+prompt a look at the waveform, never a delay in treatment.
 
 # Declarations
 

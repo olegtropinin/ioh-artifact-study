@@ -10,6 +10,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 LANG = sys.argv[1] if len(sys.argv) > 1 else 'en'
+BRACKETS = os.environ.get('CITE', 'brackets') == 'brackets'
 SUPCAPS = {
     'en': ['Figure S1. Flow of patients.', 'Figure S2. Specification curve of 420 pipeline specifications.',
            'Figure S3. Probability that a recorded episode is waveform-flagged, by final duration and nadir.',
@@ -70,8 +71,11 @@ def number(text, R):
                 j += 1
             parts.append(f'{nums[i]}–{nums[j]}' if j - i >= 2 else ','.join(map(str, nums[i:j + 1])))
             i = j + 1
-        return '^' + ','.join(parts) + '^'
+        return '[' + ', '.join(parts) + ']' if BRACKETS else '^' + ','.join(parts) + '^'
 
+    if BRACKETS:   # journal style: number in square brackets, before the punctuation mark
+        text = re.sub(r'([.,;:])\[(@[^\]]+)\]', r' [\2]\1', text)
+        text = re.sub(r'(?<=\w)\[(@[^\]]+)\]', r' [\1]', text)
     text = re.sub(r'\[(@[^\]]+)\]', rep, text)
     return text, order
 

@@ -201,7 +201,18 @@ term 0: log(1 + spurious min/h) (or group-specific version); c_negative_control 
 | F3xR2 | 50 | 3 | 4 | 0 |
 | F6xR3 | 8 | 0 | 178 | 3 |
 
-F1 × R3: expected AKI among the 33 discordant patients 1.57; probability of none 0.19. ROR if k of the 28 upward-moved patients had AKI: k = 0: 0.96, k = 1: 1.01, k = 2: 1.07, k = 3: 1.13, k = 4: 1.20, k = 5: 1.27.
+F1 × R3: expected AKI among the 33 discordant patients 1.57; probability of none 0.19.
+
+| k | ror | lo | hi | n | events | verdict |
+|---|---|---|---|---|---|---|
+| 0 | 0.956 | 0.856 | 1.068 | 2563 | 91 | equivalent |
+| 1 | 1.013 | 0.901 | 1.138 | 2563 | 91 | equivalent |
+| 2 | 1.070 | 0.900 | 1.272 | 2563 | 91 | inconclusive |
+| 3 | 1.129 | 0.938 | 1.358 | 2563 | 91 | inconclusive |
+| 4 | 1.195 | 0.957 | 1.492 | 2563 | 91 | inconclusive |
+| 5 | 1.269 | 0.982 | 1.641 | 2563 | 91 | inconclusive |
+
+ROR and A15 interval if k of the 28 upward-moved patients had developed AKI (outcomes swapped with k concordant cases; 400 bootstrap resamples, 200 permutations). Under the reference model, P(k = 0) = 0.26, P(k = 1) = 0.38, P(k ≥ 2) = 0.36.
 
 | scenario | gamma_up | median_ror | p_equivalent | coverage_of_1 | sd_lror | n |
 |---|---|---|---|---|---|---|
@@ -287,7 +298,7 @@ n = 2962, deaths = 26; OR reference 1.50 (0.69–3.27); OR F1 × R3 1.47 (0.68�
 | reference | binary65 | crude | 1.655 | 1.090 | 2.513 |
 | reference | binary65 | reduced_set | 1.463 | 0.952 | 2.248 |
 | reference | binary65 | full_set | 0.940 | 0.596 | 1.483 |
-| reference | binary65 | full_set_without_duration | 0.940 | 0.596 | 1.483 |
+| reference | binary65 | full_set_without_duration | 1.097 | 0.704 | 1.709 |
 | reference | binary55 | crude | 3.813 | 1.865 | 7.794 |
 | reference | binary55 | reduced_set | 3.362 | 1.575 | 7.180 |
 | reference | binary55 | full_set | 1.954 | 0.894 | 4.270 |

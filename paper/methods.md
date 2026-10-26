@@ -18,6 +18,11 @@ whole analysis had run end to end on a randomly permuted outcome. The Supplement
 lists every amendment before the freeze, and every change and post hoc analysis after
 unblinding, with dates and reasons. Post hoc analyses are labelled as such throughout.
 
+A large language model (Claude, Anthropic) was used under the author's direction to write the
+analysis code, to review the methods adversarially before the freeze, to simulate peer review
+of the draft and to draft the text. It also served, as described below, as a secondary
+blinded rater. The author checked all code, outputs and text.
+
 ## Participants
 
 We included adults under general anaesthesia whose record contained the 500 Hz arterial
@@ -49,7 +54,8 @@ Each 2-s waveform window was labelled with the first category that applied:
 - *noise*: minimum below −10 mmHg, or median absolute second difference ≥ 4 mmHg;
 - *valid*: none of the above.
 
-Because the monitor averages over several beats, windows from 2 s before to 8 s after any
+Hereafter, "artefact" means a value flagged by this classifier. Because the monitor averages
+over several beats, windows from 2 s before to 8 s after any
 artefact run were labelled *guard*. Eight seconds was the 95th centile of the time the monitor
 took to rejoin the waveform after an artefact.
 
@@ -63,7 +69,7 @@ artefact. Figure 1 shows examples.
   windows. It was 4 s in 62% of cases and 6 s in 35%.
 - *Monitoring period.* It ran from the first to the last uninterrupted 60 s of valid waveform
   within anaesthesia. It began a median of 9.9 min (IQR 6.3–15.8) after the start of
-  anaesthesia, so most post-induction hypotension falls outside it.[@sudfeld]
+  anaesthesia, so much post-induction hypotension falls outside it.[@sudfeld]
 
 **Reference series.** The reference was the lag-aligned monitor MAP restricted to valid
 windows.
@@ -121,8 +127,8 @@ Models were adjusted for:
 - log anaesthesia duration.
 
 Vasopressors, fluids and blood loss were not included, because they may lie on the causal
-path. With 91 events and about 20 parameters there were about 4.5 events per parameter. We
-used Firth-penalised logistic regression,[@firth] and the two models that form each ratio
+path. With 91 events and 21 parameters there were 4.3 events per parameter. We
+used Firth-penalised logistic regression with Wald intervals,[@firth] and the two models that form each ratio
 share the same adjustment set.
 
 ## Statistical analysis
@@ -140,7 +146,7 @@ Proportions have patient-cluster bootstrap CIs.
 **Primary estimand.** The primary estimand was the ratio of odds ratios, ROR =
 OR~pipeline~ / OR~reference~, for AKI with the binary exposure "≥ 10 min below 65 mmHg". It
 compared F1 × R3 with the reference at R3, using the same adjustment set and the same
-patients. The ROR is unaffected by confounding that the two series share.
+patients. The ROR is largely insensitive to confounding that the two series share.
 
 We pre-specified an equivalence margin of 0.80–1.25, the conventional margin symmetric on the
 log scale:
@@ -180,7 +186,9 @@ hypertensive minutes: pipeline MAP above 120 mmHg while the reference was ≤ 10
 - *guard-dominated*;
 - *physiological*.
 
-We tabulated the probability that an episode was flagged by final duration and nadir. Post
+We tabulated the probability that an episode was flagged by final duration and nadir. The
+protocol specified a depth-2 decision tree for a simple rule; the best rule was a single
+split, which is reported. Post
 hoc, we also tabulated it by elapsed duration and nadir so far, which is what is known while
 an episode unfolds.
 

@@ -5,10 +5,10 @@
 We performed a retrospective cohort study of the open VitalDB dataset, which contains
 6,388 non-cardiac surgical cases at Seoul National University Hospital (2016–2017) with
 anaesthesia-record data, laboratory results, monitor numerics and high-resolution
-waveforms.^1^ Data collection was approved by the Seoul National University Hospital
+waveforms.[@vitaldb] Data collection was approved by the Seoul National University Hospital
 institutional review board, and the data are de-identified and publicly released, so no new
 ethics approval or consent was required for this secondary analysis. The study is reported
-according to STROBE and its RECORD extension.^2,3^ The analysis protocol was written
+according to STROBE and its RECORD extension.[@strobe; @record] The analysis protocol was written
 before any exposure–outcome association was computed, was revised after an adversarial
 methods review, and was frozen by a tagged commit after the complete analysis had been run
 end to end on a randomly permuted outcome vector (Supplementary Protocol). Code is
@@ -20,7 +20,7 @@ We included adults (≥ 18 years) under general anaesthesia whose record contain
 500 Hz radial arterial pressure waveform and at least 30 min of waveform-verified
 monitoring (defined below). One case per patient was retained (the first eligible case).
 For the kidney analyses we further excluded transplantation, patients without a baseline
-creatinine, a baseline estimated glomerular filtration rate (eGFR, CKD-EPI 2021^4^)
+creatinine, a baseline estimated glomerular filtration rate (eGFR, CKD-EPI 2021[@ckdepi])
 < 15 mL min^−1^ 1.73 m^−2^, and patients without a creatinine measurement within 7 days
 after anaesthesia.
 
@@ -41,7 +41,8 @@ plateau), *non-pulsatile* (pulse pressure < 8 mmHg, interdecile range < 3 mmHg, 
 systolic upstroke — a rise > 8 mmHg within 100 ms — in the centred 6-s window: stopcock
 closed for blood sampling, kinked or clotted line), or *noise* (minimum < −10 mmHg or median
 absolute second difference ≥ 4 mmHg). Because the monitor averages over several beats,
-windows from 2 s before to 8 s after any artefact run were labelled *guard*; the 8 s
+windows from 2 s before to 8 s after any artefact run were labelled *guard* (examples in
+Figure 1); the 8 s
 corresponds to the 95th centile of the time the monitor took to rejoin the waveform after
 an artefact. Thresholds were set on descriptive data from fewer than 600 cases, without
 outcome data. A pulsatility criterion based on beat-lag autocorrelation was evaluated and
@@ -68,13 +69,13 @@ into an exposure. Pipelines used only the monitor numerics.
 *Artefact filters* reproduced published rules:
 - F0: none;
 - F1: MAP < 20 or > 250 mmHg removed, as in a recent VitalDB study of hypotension and
-  kidney injury;^5^
-- F2: MAP < 30 or > 200;^6^
-- F3: systolic > 250, diastolic < 15, MAP < 35 or > 150, or pulse pressure < 15 mmHg;^7^
+  kidney injury;[@leesb]
+- F2: MAP < 30 or > 200;[@khan]
+- F3: systolic > 250, diastolic < 15, MAP < 35 or > 150, or pulse pressure < 15 mmHg;[@jacobsson]
 - F4: a physiological-consistency rule (MAP < 20 or > 200; systolic < 20 or > 300;
   systolic ≤ diastolic; pulse pressure < 5; diastolic < 5);
-- F5: F4 followed by removal of values that differ from both neighbours by > 30 mmHg;^8^
-- F6: F4 followed by a 7-point running median.^9^
+- F5: F4 followed by removal of values that differ from both neighbours by > 30 mmHg;[@du]
+- F6: F4 followed by a 7-point running median.[@pasma2020]
 
 *Resolutions*:
 - R1: all 2-s values;
@@ -99,7 +100,7 @@ specifications.
 
 ## Outcomes and covariates
 
-The primary outcome was acute kidney injury (AKI) by the creatinine criteria of KDIGO:^10^
+The primary outcome was acute kidney injury (AKI) by the creatinine criteria of KDIGO:[@kdigo]
 an increase ≥ 0.3 mg dL^−1^ within 48 h, or ≥ 1.5 times baseline within 7 days.
 - Baseline was the last creatinine within 30 days before induction, otherwise the
   recorded preoperative value.
@@ -129,7 +130,7 @@ reference. Confidence intervals for proportions use the patient-cluster bootstra
   exposure "≥ 10 min with MAP < 65 mmHg", comparing F1 × R3 with the reference at R3.
   At matched resolution, this contrast isolates the effect of artefact.
 - Both models were Firth-penalised logistic regressions with the same adjustment set,
-  fitted on the same patients.^11^
+  fitted on the same patients.[@firth]
 - Uncertainty came from a paired patient-level bootstrap with 2,000 resamples. Before
   unblinding, we checked the calibration of this interval on 100 independent permutations
   of the outcome, under which the true ROR is exactly 1. The percentile interval covered 1
@@ -187,7 +188,7 @@ specificity.
   - ECG and plethysmographic heart rate during non-pulsatile windows;
   - the non-pulsatile fraction in patients with preoperative atrial fibrillation.
 - *Injection–recovery*: synthetic flush, zeroing, sampling, damping, noise and
-  transducer-offset artefacts after Li et al.^12^ were inserted into clean segments.
+  transducer-offset artefacts after Li et al.[@li] were inserted into clean segments.
 - *A blinded rating* of 150 stratified 40-s snippets by an AI model, reported as secondary
   evidence only. A 400-snippet human adjudication set is released for future validation.
 

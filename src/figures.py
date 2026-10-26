@@ -38,7 +38,7 @@ def fig_examples(c):
     e = pd.read_pickle(os.path.join(ROOT, 'out', 'descriptive', 'episodes_labelled.pkl'))
     desc = pd.read_pickle(os.path.join(CACHE, 'desc.pkl')).set_index('caseid')
     want = [(2, 'Transducer open to air / zeroing'), (4, 'Closed stopcock (blood sampling)'),
-            (3, 'Fast flush, then recovery'), (4, 'Damped / interrupted trace near cuff inflation')]
+            (3, 'Fast flush, then recovery'), (4, 'Non-pulsatile trace, cuff reading within 3 min')]
     rng = np.random.default_rng(4)
     fig, axs = plt.subplots(4, 1, figsize=(7.2, 7.4))
     used = set()
@@ -174,6 +174,8 @@ def fig_spec_curve(mode):
     ax.axhline(1, color=INK2, lw=0.8)
     ax.axhspan(0.8, 1.25, color=GRID, alpha=0.6, lw=0)
     ax.set_yscale('log')
+    ax.set_yticks([0.33, 0.5, 1, 2, 3], ['0.33', '0.5', '1', '2', '3'])
+    ax.minorticks_off()
     ax.set_ylabel('Ratio of odds ratios\n(pipeline / matched reference)')
     ax.legend(frameon=False, ncol=4, fontsize=7, loc='upper left', title='Exposure metric', title_fontsize=7)
     ax.set_xticks([])
@@ -188,6 +190,40 @@ def fig_spec_curve(mode):
     ax2.set_xlabel(f'{len(p)} pipeline specifications, sorted by ratio of odds ratios')
     ax2.grid(False)
     save(fig, 'fig3_spec_curve')
+
+
+def fig_depth_heatmap(mode):
+    """Figure 3: ROR at the 1-min median resolution by filter x exposure metric x threshold."""
+    sc = pd.read_csv(os.path.join(ROOT, 'out', f'results_{mode}', 'spec_curve.csv'))
+    p = sc[(sc.family == 'pipe') & (sc.res == 'R3')]
+    cols = [(m, t) for m in ('binary', 'minutes', 'auc', 'twa') for t in (55, 60, 65)]
+    lab = {'binary': '≥10 min', 'minutes': 'Minutes', 'auc': 'AUC', 'twa': 'TWA'}
+    filt = ['F0', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6']
+    M = np.array([[p[(p['filter'] == f) & (p.metric == m) & (p.thr == t)].ror.iloc[0] for m, t in cols]
+                  for f in filt])
+    from matplotlib.colors import LinearSegmentedColormap
+    cmap = LinearSegmentedColormap.from_list('div', [ORANGE, '#f6f5f2', BLUE])
+    fig, ax = plt.subplots(figsize=(7.2, 3.3))
+    lim = np.log(3)
+    ax.imshow(np.log(M), cmap=cmap, vmin=-lim, vmax=lim, aspect='auto')
+    for i in range(M.shape[0]):
+        for j in range(M.shape[1]):
+            v = M[i, j]
+            ax.text(j, i, f'{v:.2f}', ha='center', va='center', fontsize=7,
+                    color='white' if abs(np.log(v)) > 0.7 else INK)
+    ax.set_xticks(range(len(cols)), [f'{lab[m]}\n<{t}' for m, t in cols], fontsize=7)
+    ax.set_yticks(range(len(filt)), ['F0 none', 'F1 MAP 20–250', 'F2 MAP 30–200', 'F3 Jacobsson',
+                                     'F4 consistency', 'F5 + neighbour', 'F6 + 7-pt median'], fontsize=7)
+    for x in (2.5, 5.5, 8.5):
+        ax.axvline(x, color='white', lw=2)
+    ax.grid(False)
+    ax.tick_params(length=0)
+    ax.set_title('Ratio of odds ratios for AKI, pipeline / reference (1-min median resolution)', fontsize=8)
+    fig.text(0.01, 0.01, 'Orange: ROR < 1; blue: ROR > 1 (colour scale 1/3 to 3, log). '
+             'AUC, area under the threshold; TWA, time-weighted average below the threshold.',
+             fontsize=6.5, color=INK2)
+    fig.subplots_adjust(bottom=0.2, left=0.17, right=0.99)
+    save(fig, 'fig3_depth_heatmap')
 
 
 def fig_forest(mode):
@@ -230,3 +266,4 @@ if __name__ == '__main__':
     else:
         fig_spec_curve(what)
         fig_forest(what)
+        fig_depth_heatmap(what)

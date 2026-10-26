@@ -1,0 +1,38 @@
+{
+ "n": 2563,
+ "events": 91,
+ "primary": {
+  "filter": "F1",
+  "res": "R3",
+  "or_pipe": 0.8992025172832089,
+  "or_ref": 0.9402643434205759,
+  "ror": 0.9563294871014797,
+  "ror_lo": 0.8595426772257481,
+  "ror_hi": 1.0640147512531015,
+  "ror_simlo": 0.8024514065785904,
+  "ror_simhi": 1.1397152281148235,
+  "ror_lo_pct": 0.9038564760654799,
+  "ror_hi_pct": 1.0028310796219233,
+  "boot_se": 0.026803842634485365,
+  "null_sd": 0.05443981036365188,
+  "p_perm": 0.42,
+  "verdict": "equivalent",
+  "bootstrap_fails": 8,
+  "B": 2000,
+  "simultaneous_crit": 3.2224800869033325
+ },
+ "spec_curve": {
+  "n_specs": 420,
+  "ci_excludes_1": 181,
+  "ror_median": 0.9924951822241055,
+  "ror_iqr": [
+   0.9501044877614552,
+   1.0053595868419212
+  ],
+  "ror_range": [
+   0.3045624463908801,
+   2.762019390266671
+  ]
+ }
+}
+NPROC=10 timeout 9000 .venv/bin/python -W ignore src/analysis.py real  4197.56s user 143.34s system 463% cpu 15:36.56 total

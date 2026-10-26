@@ -11,7 +11,7 @@
   filters do not remove it.
 - The 7-point running median, recommended in earlier work as a robust smoother, should not
   be used to estimate hypotension exposure. On per-minute data it creates spurious minutes
-  and masks about a quarter of true hypotension. On charted 5- or 15-min data it erases
+  and masks about a fifth of true hypotension. On charted 5- or 15-min data it erases
   most exposure.
 - Resolution matters more than the filter: charting every 5 or 15 min raised the proportion
   of exposed patients from 42% to 51–53% against the same reference. Thresholds derived
@@ -27,13 +27,19 @@
   twelve. Its positive predictive value (0.46) is too low for it to suppress an alarm
   silently. It is better used to prompt a glance at the waveform before treating, and to
   clean data retrospectively.
-- Cuff inflation is a frequent, avoidable source of arterial artefact. Artefact on the
-  arterial trace was eight times more frequent in the minute before a cuff value appeared
-  than at other times. It peaked 16 s before the value, at five times its baseline, which is
-  the time course of an inflating cuff occluding the cannulated arm.
-  Placing the cuff on the other arm, or suspending cuff cycling while an arterial line is
-  working, would remove it. Some departments do this already; our data quantify why it
-  matters. In retrospective studies that compare cuff and arterial pressure (for example
+- Cuff cycling is a frequent and probably avoidable source of arterial artefact. Artefact on
+  the arterial trace was eight times more frequent in the minute before a cuff value
+  appeared than at other times. It peaked 16 s before the value, during the inflation and
+  measurement cycle.
+  - It was stronger with radial than with pedal or femoral catheters, and stronger on the
+    right than on the left. This pattern fits occlusion of the cannulated arm in a subset
+    of patients.
+  - The excess with lower-limb catheters shows that this is not the whole explanation;
+    other activity that coincides with cuff cycles, such as handling of the arm or the
+    line, probably contributes.
+
+  Placing the cuff on the arm opposite the arterial line, or suspending cuff cycling while
+  the line is working, is a simple measure that a prospective study could test. In retrospective studies that compare cuff and arterial pressure (for example
   studies of cuff–arterial discordance), arterial values from the minute before each cuff
   reading are enriched for artefact and should be treated with caution.
 

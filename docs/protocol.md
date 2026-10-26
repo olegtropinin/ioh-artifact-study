@@ -312,3 +312,21 @@ permutation-null SD), with 200 permutations per cell. Under the same 100 null pe
 this interval covered 1 in 0.99, 0.99, 1.00 and 0.97 respectively (conservative). The rule
 is applied to all ROR-type contrasts: the 35 F × R cells and their simultaneous bands, the
 resolution effect, the dose-slope differences and the reference-variant sensitivity analyses.
+
+## Notes after unblinding
+
+**Code hash.** The `protocol-freeze` tag message records the SHA-256 printed by the final
+permuted dry run (12375fea…). Between that dry run and the freeze commit, only
+`src/figures.py` and `src/tables.py` (plotting and table formatting) were edited, so the
+hash of `src/*.py` at the tagged commit is 871bd97e…, which is the hash recorded by the real
+analysis (`out/results_real/summary.json`). `git diff protocol-freeze -- src/analysis.py
+src/models.py src/pipelines.py src/artifact.py` is empty for the real run.
+
+**Post hoc (not pre-specified).** `src/posthoc_depth.py` adds A15-calibrated intervals for
+the depth-weighted RORs (AUC and TWA below 55 and 65 mmHg, F0/F1/F3 at R3), prompted by
+their point estimates in the specification curve. Reported as post hoc. The depth-metric
+heatmap (Figure 3) and forest plot (Figure 6) were added after unblinding.
+
+**Post hoc (not pre-specified).** `src/posthoc_cuff_site.py` compares the peri-cuff artefact
+excess between radial and pedal/femoral catheters (an arm cuff cannot occlude the latter) and
+between right and left radial catheters, prompted by the C3 result.

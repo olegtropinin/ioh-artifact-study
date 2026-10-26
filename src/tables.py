@@ -79,12 +79,13 @@ def table2():
     o3 = pd.read_csv(os.path.join(DESC, 'o3_misclassification.csv'))
     o2 = pd.read_csv(os.path.join(DESC, 'o2_spurious.csv'))
     m = r.merge(o3, on=['filter', 'res'], how='left').merge(
-        o2[['filter', 'res', 'spurious_frac', 'masked_per_low']], on=['filter', 'res'], how='left')
+        o2.assign(masked_of_true=o2.masked_min / (o2.masked_min + (o2.confirmed_frac + o2.bridged_low_frac) * o2.low_min))[
+            ['filter', 'res', 'spurious_frac', 'masked_of_true']], on=['filter', 'res'], how='left')
     out = ['| Filter | Resolution | Spurious % of low minutes | Masked % | Exposed, pipeline / reference % | κ | ROR (95% CI) | Simultaneous band |',
            '|---|---|---|---|---|---|---|---|']
     for _, x in m.iterrows():
         sp = '–' if pd.isna(x.spurious_frac) else f'{100 * x.spurious_frac:.1f}'
-        ms = '–' if pd.isna(x.masked_per_low) else f'{100 * x.masked_per_low:.1f}'
+        ms = '–' if pd.isna(x.masked_of_true) else f'{100 * x.masked_of_true:.1f}'
         out.append(f'| {FNAME[x["filter"]]} | {RNAME[x.res]} | {sp} | {ms} | '
                    f'{100 * x.prev_pipe:.1f} / {100 * x.prev_ref:.1f} | {x.kappa:.2f} | '
                    f'{x.ror:.2f} ({x.ror_lo:.2f}–{x.ror_hi:.2f}) | {x.ror_simlo:.2f}–{x.ror_simhi:.2f} |')
@@ -105,20 +106,69 @@ def table3():
     return '\n'.join(out)
 
 
+def md(df, fmt=3):
+    df = df.copy()
+    for col in df.columns:
+        if df[col].dtype.kind == 'f':
+            df[col] = df[col].map(lambda v: '' if pd.isna(v) else f'{v:.{fmt}g}' if abs(v) >= 1000 else f'{v:.{fmt}f}')
+    head = '| ' + ' | '.join(map(str, df.columns)) + ' |'
+    return '\n'.join([head, '|' + '---|' * len(df.columns)] +
+                     ['| ' + ' | '.join(map(str, r)) + ' |' for r in df.itertuples(index=False)])
+
+
+def supplementary():
+    S = json.load(open(os.path.join(RES, 'summary.json')))
+    o2 = pd.read_csv(os.path.join(DESC, 'o2_spurious.csv'))
+    o3 = pd.read_csv(os.path.join(DESC, 'o3_misclassification.csv'))
+    ph_path = os.path.join(RES, 'posthoc_depth.csv')
+    out = ['# Supplementary tables\n',
+           '## Table S1. Classification of recorded minutes with MAP < 65 mmHg against the reference (descriptive cohort)\n',
+           md(o2[['res', 'filter', 'low_min', 'spurious_frac', 'lo', 'hi', 'confirmed_frac', 'bridged_low_frac',
+                  'indeterminate_frac', 'masked_per_low', 'patients_with_spurious']]),
+           '\nlow_min: pipeline minutes < 65; fractions are of low_min; lo/hi: patient-cluster bootstrap 95% CI of the '
+           'spurious fraction; masked_per_low: reference low minutes recorded ≥ 65 by the pipeline, per pipeline low minute.\n',
+           '## Table S2. Agreement of the binary exposure (≥ 10 min MAP < 65) with the reference\n',
+           md(o3[['filter', 'res', 'prev_ref', 'prev_pipe', 'sens', 'spec', 'kappa', 'flips', 'up', 'down',
+                  'mean_diff', 'loa_lo', 'loa_hi']]),
+           '\nflips: patients whose exposure category differs (up: unexposed by reference, exposed by pipeline). '
+           'mean_diff and limits of agreement (loa) in minutes below 65 mmHg.\n']
+    if os.path.exists(ph_path):
+        out += ['## Table S3. POST HOC: calibrated RORs for depth-weighted exposures (1-min median resolution)\n',
+                md(pd.read_csv(ph_path)),
+                '\nTWA per mmHg; AUC per 100 mmHg·min (capped at the reference 99th centile). Not pre-specified.\n']
+    out += ['## Table S4. Sensitivity analyses of the primary ROR (F1 × R3)\n',
+            md(pd.read_csv(os.path.join(RES, 'sensitivity.csv'))), '']
+    rows = []
+    for spec, v in S['o5'].items():
+        for model, xs in v['models'].items():
+            for i, d in enumerate(xs):
+                rows.append(dict(pipeline=spec, model=model, term=i, nonzero=d['nonzero'],
+                                 or_per_sd=d['or_per_sd'], lo=d['lo_sd'], hi=d['hi_sd']))
+    out += ['## Table S5. Differential misclassification: AKI on spurious minutes per hour, adjusted for reference exposure\n',
+            md(pd.DataFrame(rows)),
+            '\nterm 0: log(1 + spurious min/h) (or the group-specific version); c_negative_control term 1: spurious '
+            'hypertensive min/h; d_mechanism terms 1–3: blood gases/h, log blood loss, red-cell units. Odds ratios per SD.\n']
+    return '\n'.join(out)
+
+
 if __name__ == '__main__':
+    big = ['## Table 3. Every filter × resolution: measurement error and its effect on the AKI association\n',
+           table2(),
+           '\nSpurious: pipeline minute < 65 mmHg with reference ≥ 65. Masked: share of reference minutes < 65 that the '
+           'pipeline records ≥ 65; neither is defined for charted resolutions. '
+           'Exposure: ≥ 10 min with MAP < 65 mmHg; exposure prevalence and κ from the descriptive cohort '
+           '(charted resolutions at phase offset 0). ROR (ratio of odds ratios, pipeline / reference at matched '
+           'resolution) from the AKI set; 95% CI = log ROR ± 1.96 × max(paired-bootstrap SE, permutation-null SD); '
+           'simultaneous band: bootstrap max-|z| critical value over all 35 cells applied to the same SE.\n']
     parts = ['## Table 1. Patient characteristics\n', table1(),
              '\nValues are median (IQR) or n (%). Reference = waveform-verified monitor MAP, 1-min median.\n',
-             '## Table 2. Every filter × resolution: measurement error and its effect on the AKI association\n',
-             table2(),
-             '\nSpurious: pipeline minute < 65 mmHg with reference ≥ 65. Masked: reference minute < 65 that the '
-             'pipeline records ≥ 65, per reference low minute. Spurious and masked are not defined for charted '
-             'resolutions. Exposure: ≥ 10 min with MAP < 65 mmHg. κ from the descriptive cohort; ROR (ratio of '
-             'odds ratios, pipeline / reference at matched resolution) from the AKI set; 95% CI = log ROR '
-             '± 1.96 × max(paired-bootstrap SE, permutation-null SD); simultaneous band: bootstrap '
-             'max-|z| critical value over all 35 cells applied to the same SE.\n',
-             '## Table 3. Probability that a recorded low-MAP episode is waveform-flagged artefact\n',
+             '## Table 2. Probability that a recorded low-MAP episode is waveform-flagged artefact\n',
              table3(),
-             '\nEpisode: contiguous run of monitor MAP < 65 mmHg. Percent flagged (patient-cluster bootstrap 95% CI).\n']
+             '\nEpisode: contiguous run of monitor MAP < 65 mmHg. Percent flagged (patient-cluster bootstrap 95% CI); '
+             'n = episodes.\n'] + big
+    supp = supplementary()
+    with open(os.path.join(ROOT, 'paper', f'supplement_tables{"" if MODE == "real" else "_" + MODE}.md'), 'w') as fh:
+        fh.write(supp)
     path = os.path.join(ROOT, 'paper', f'tables{"" if MODE == "real" else "_" + MODE}.md')
     with open(path, 'w') as fh:
         fh.write('\n'.join(parts))

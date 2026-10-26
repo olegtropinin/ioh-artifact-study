@@ -22,26 +22,30 @@ zeroing in 33% (0.2 per hour).
 non-invasive cuff pressure, the fraction of arterial windows labelled artefact in the 60 s
 before a new cuff value was 13.9%, against 1.8% at other times (ratio 7.9; Wilcoxon
 p < 10^−100^; 19,465 cuff readings). The excess peaked 16 s before the cuff value appeared,
-at 25% of windows, against a baseline of 4.6% (Figure 5; 15,643 readings with a complete
-−120 to +30 s window) — the time course of cuff
-inflation on the cannulated arm.
+at 25% of windows, against a baseline of 4.6% (Figure 2; 15,643 readings with a complete
+−120 to +30 s window). In a post hoc comparison by cannulation site, the excess was larger
+with radial catheters than with pedal or femoral catheters, which an arm cuff cannot occlude:
+13.9% vs 1.8% (2,219 patients) against 9.6% vs 3.4% (58 patients; Mann–Whitney p < 0.001 for
+the difference). It was also larger with right than with left radial catheters: the
+proportion of patients with artefact before ≥ 10% of cuff readings was 59% vs 30%. The cuff
+arm is not recorded in VitalDB.
 
 ## Spurious and masked hypotension
 
 At the per-minute median resolution most commonly used in retrospective work (R3), 0.66%
 (95% CI 0.58–0.74) of recorded minutes with MAP < 65 mmHg after the F1 filter were spurious
-— the waveform-verified reference was ≥ 65 mmHg (Figure 2; Table S2). Spurious fractions were
+— the waveform-verified reference was ≥ 65 mmHg (Figure 3; Table S1). Spurious fractions were
 higher with instantaneous sampling: 3.3% (3.0–3.6) with one value per minute (R2) and 2.0%
 (1.9–2.2) with the raw 2-s stream (R1). The published filters F3–F5 removed most spurious
 minutes at R1 and R3 (0.3–0.9%) but not at R2 (1.8–3.1%), where a single sampled value per
 minute either catches an artefact or not. The 7-point running median (F6) behaved
 differently from every other filter: it *created* spurious minutes (7.5% at R3, 9.9% at R2)
-and masked 22% (R3) to 28% (R2) of true hypotensive minutes, because it delays and truncates
+and masked 20% (R3) to 24% (R2) of true hypotensive minutes, because it delays and truncates
 episodes.
 
 **Binary exposure.** Against the reference at matched resolution, the binary exposure
 "≥ 10 min with MAP < 65 mmHg" was classified with sensitivity ≥ 0.99, specificity
-0.95–0.99 and κ 0.95–0.99 for every filter except F6 (Table S3). With F1 at R3, 38 of 3,249
+0.95–0.99 and κ 0.95–0.99 for every filter except F6 (Table S2). With F1 at R3, 38 of 3,249
 patients (1.2%) changed exposure category, 32 of them upwards; 30 of the 38 flips occurred in
 patients whose reference exposure lay between 5 and 10 min. Resolution changed exposure
 prevalence more than any filter did: with the reference itself, 42.4% of patients were
@@ -55,7 +59,7 @@ both at phase offset 0). The
 Of 106,725 monitor-recorded episodes of MAP < 65 mmHg in 3,123 patients, 8,471 (7.9%) were
 waveform-flagged, 3,909 (3.7%) guard-dominated and 94,345 (88.4%) physiological; flagged
 episodes accounted for 4.3% of hypotensive minutes. The probability that an episode was
-artefact depended steeply on its depth and duration (Table 3; Figure 4):
+artefact depended steeply on its depth and duration (Table 2; Figure 4):
 - episodes lasting ≤ 60 s with a nadir < 40 mmHg were artefact in 65–90%;
 - episodes with a nadir of 55–64 mmHg were artefact in ≤ 2.4% at every duration;
 - episodes lasting > 1 min with a nadir ≥ 40 mmHg were artefact in ≤ 2%.

@@ -1,0 +1,10 @@
+step,n
+"ART waveform, monitoring period found",3429
+age >= 18,3389
+general anaesthesia,3383
+>= 30 min reference-valid monitoring,3370
+not transplantation,3082
+baseline creatinine available,3068
+baseline eGFR >= 15,3033
+creatinine within 7 days after surgery,2640
+first eligible case per patient,2563

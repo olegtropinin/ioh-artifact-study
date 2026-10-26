@@ -1,0 +1,2 @@
+{'n': 2563, 'prev_ref': 0.41747951619196255, 'prev_pipe': 0.42645337495122904, 'discordant': 33, 'sd_log_ror': 0.04760121288693943, 'half_width': 0.09329837725840127, 'mean_ror': 0.9855018360821612, 'attainable': True}
+timeout 3000 .venv/bin/python -W ignore src/precision.py  8.80s user 0.33s system 100% cpu 9.070 total

@@ -3,3 +3,4 @@ data/
 .claude/progress/
 out/cache/
 __pycache__/
+out/adjudication/key_hidden.csv

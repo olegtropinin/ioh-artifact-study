@@ -268,3 +268,47 @@ unattainable in advance.
 ≥ 30 min reference-valid monitoring, first case per patient. *AKI analysis set* (O4, O5,
 S-analyses): additionally excludes transplantation, missing baseline creatinine, eGFR < 15,
 and no creatinine within 7 days.
+
+**A13 — classifier v2 (before freezing; no outcome data examined).** The beat-lag
+autocorrelation pulsatility criterion was dropped: in descriptive data it labelled 12% of
+windows in patients with preoperative atrial fibrillation as non-pulsatile (1% in sinus
+rhythm), and those windows had pulse pressures of 56–83 mmHg; it also fired on bigeminy and
+slow heart rates. It was replaced by: pulse pressure < 8 mmHg, OR interdecile range < 3 mmHg,
+OR no systolic upstroke (rise > 8 mmHg within 100 ms) in the centred 6-s window. The noise
+rule became minimum < −10 mmHg OR median absolute second difference ≥ 4 mmHg (the earlier
+rule fired on single spikes). Guard is asymmetric: 2 s before and 8 s after an artefact run
+(95th centile of monitor recovery). All 3,645 waveform cases were re-extracted with these
+features; 211 had a waveform track listed but not retrievable and are excluded as "waveform
+not retrievable".
+
+**A14 — O5 power and Firth iterations (before freezing; only the permuted outcome examined).**
+In the permuted dry run, spurious minutes at F1 × R3 were non-zero in 241 of 2,563 patients
+(zero/flush-dominated in 19), which cannot carry the differential-misclassification test.
+O5 is therefore run twice: at F1 × R3 as pre-specified, and at F0 × R1 (raw 2-s stream;
+non-zero in 1,728 patients), with odds ratios also reported per standard deviation of the
+exposure. The F0 × R1 version is the one interpreted. The Firth iteration limit was raised
+from 50 to 200: in the dry run 1.7% of bootstrap fits stopped at 50 iterations short of the
+1e−7 tolerance, and refitting them changed the estimate only in the eighth decimal.
+
+**A15 — null calibration of the ROR interval (written before the calibration result was
+seen; real outcome never examined).** In the dry run several RORs had percentile intervals
+excluding 1 although the permuted outcome makes the true ROR exactly 1, because the contrast
+rests on the few dozen patients whose exposure category differs. `src/null_calibration.py`
+re-permutes the outcome 100 times and, for F1 × R3, F0 × R1, F3 × R2 and F6 × R3, records how
+often the paired-bootstrap 95% interval (B = 200) covers 1, and the ratio of the mean
+bootstrap SE to the SD of log ROR across permutations. Decision rule, fixed now:
+- if coverage for F1 × R3 is ≥ 0.90, the percentile bootstrap interval stays primary;
+- otherwise every ROR interval (and simultaneous band) is computed as
+  log ROR ± z × max(bootstrap SE, permutation-null SD of that cell), with the null SD
+  estimated by 200 permutations per cell, and the percentile interval is reported as
+  secondary. The equivalence verdict uses the primary interval.
+
+*A15 result (100 permutations, B = 200).* Coverage of 1 by the percentile interval: F1 × R3
+0.51, F0 × R1 0.79, F3 × R2 0.89, F6 × R3 0.91. The bootstrap distribution of log ROR is
+spiky — most resamples change few of the patients who drive the contrast — so its central
+95% is narrow even where its SD is not (mean bootstrap SE / null SD 0.80 for F1 × R3). The
+pre-specified rule therefore applies: primary intervals are log ROR ± z × max(bootstrap SE,
+permutation-null SD), with 200 permutations per cell. Under the same 100 null permutations
+this interval covered 1 in 0.99, 0.99, 1.00 and 0.97 respectively (conservative). The rule
+is applied to all ROR-type contrasts: the 35 F × R cells and their simultaneous bands, the
+resolution effect, the dose-slope differences and the reference-variant sensitivity analyses.

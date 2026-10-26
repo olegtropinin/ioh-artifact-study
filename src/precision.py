@@ -22,11 +22,11 @@ def main():
     ckd = (c.egfr.to_numpy(float) < 60).astype(float)
     asa = (c.asa >= 3).to_numpy(float)
     lin = 0.25 * age + 0.6 * ckd + 0.4 * asa + np.log(1.5) * ref
-    # intercept giving ~5.6% AKI
+    # intercept giving the observed AKI incidence (91/2563 = 3.6%; count only, no association)
     lo, hi = -10.0, 0.0
     for _ in range(60):
         mid = (lo + hi) / 2
-        if np.mean(1 / (1 + np.exp(-(mid + lin)))) < 0.056:
+        if np.mean(1 / (1 + np.exp(-(mid + lin)))) < float(os.environ.get("AKI_PREV", 0.036)):
             lo = mid
         else:
             hi = mid

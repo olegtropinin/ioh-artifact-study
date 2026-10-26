@@ -1,0 +1,47 @@
+{
+ "F1xR3": {
+  "perms": 100,
+  "B": 200,
+  "coverage_of_1": 0.51,
+  "null_sd_lror": 0.052414462026533895,
+  "mean_boot_se": 0.042036521512411176,
+  "se_ratio": 0.8020023460534791,
+  "null_ror_2_5": 0.8987248363672898,
+  "null_ror_97_5": 1.1235671034268855,
+  "inside_margin": 0.86
+ },
+ "F0xR1": {
+  "perms": 100,
+  "B": 200,
+  "coverage_of_1": 0.79,
+  "null_sd_lror": 0.07148587532946378,
+  "mean_boot_se": 0.06466224345408843,
+  "se_ratio": 0.9045457323712324,
+  "null_ror_2_5": 0.8954449628267384,
+  "null_ror_97_5": 1.1758213939892956,
+  "inside_margin": 0.81
+ },
+ "F3xR2": {
+  "perms": 100,
+  "B": 200,
+  "coverage_of_1": 0.89,
+  "null_sd_lror": 0.0721343986581552,
+  "mean_boot_se": 0.07319486509172489,
+  "se_ratio": 1.0147012583912323,
+  "null_ror_2_5": 0.9011717281102274,
+  "null_ror_97_5": 1.1545636828463073,
+  "inside_margin": 0.63
+ },
+ "F6xR3": {
+  "perms": 100,
+  "B": 200,
+  "coverage_of_1": 0.91,
+  "null_sd_lror": 0.12230443596606892,
+  "mean_boot_se": 0.13080932767848663,
+  "se_ratio": 1.0695387018895801,
+  "null_ror_2_5": 0.799158808011578,
+  "null_ror_97_5": 1.2744792437169672,
+  "inside_margin": 0.01
+ }
+}
+NPROC=10 timeout 3600 .venv/bin/python -W ignore src/null_calibration.py  3082.20s user 81.84s system 873% cpu 6:02.20 total

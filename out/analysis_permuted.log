@@ -1,0 +1,38 @@
+{
+ "n": 2563,
+ "events": 91,
+ "primary": {
+  "filter": "F1",
+  "res": "R3",
+  "or_pipe": 0.6791734307381383,
+  "or_ref": 0.7045310899086206,
+  "ror": 0.9640077499294302,
+  "ror_lo": 0.8578105625416059,
+  "ror_hi": 1.0833521787963865,
+  "ror_simlo": 0.7973623001901161,
+  "ror_simhi": 1.1654814150385915,
+  "ror_lo_pct": 0.9347498649614423,
+  "ror_hi_pct": 0.992598843108364,
+  "boot_se": 0.014959097683232975,
+  "null_sd": 0.05954900428178829,
+  "p_perm": 0.595,
+  "verdict": "equivalent",
+  "bootstrap_fails": 47,
+  "B": 2000,
+  "simultaneous_crit": 3.187125978020272
+ },
+ "spec_curve": {
+  "n_specs": 420,
+  "ci_excludes_1": 0,
+  "ror_median": 0.9853884299213791,
+  "ror_iqr": [
+   0.9461660989049241,
+   1.0013118282074598
+  ],
+  "ror_range": [
+   0.35925653052671425,
+   2.0217865632116543
+  ]
+ }
+}
+NPROC=10 timeout 9000 .venv/bin/python -W ignore src/analysis.py permuted  4699.61s user 162.99s system 480% cpu 16:52.34 total

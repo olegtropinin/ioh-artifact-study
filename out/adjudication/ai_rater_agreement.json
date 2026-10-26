@@ -1,0 +1,10 @@
+{
+ "n": 131,
+ "agree": 0.9770992366412213,
+ "kappa": 0.9536938847649346,
+ "sens_alg_vs_ai": 0.95,
+ "spec_alg_vs_ai": 1.0,
+ "guard_rated_artefact": 0.6842105263157895,
+ "guard_n": 19,
+ "unsure": 2
+}

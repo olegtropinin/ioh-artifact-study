@@ -14,7 +14,7 @@ CACHE = os.path.join(ROOT, 'out', 'cache')
 
 # ---------------------------------------------------------------- Firth logistic
 
-def firth_logit(X, y, max_iter=50, tol=1e-7):
+def firth_logit(X, y, max_iter=200, tol=1e-7):
     """Firth-penalised logistic regression (Newton-Raphson with step halving).
     Returns (beta, cov, converged)."""
     n, p = X.shape

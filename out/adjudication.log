@@ -1,0 +1,2 @@
+{'C_random_valid': 100, 'B_low_valid': 100, 'A_low_flagged': 100, 'D_flagged_map_ge65': 50, 'A_low_guard_only': 50} AI subset 152 grids 26
+timeout 3600 .venv/bin/python -W ignore src/adjudication.py  58.01s user 8.16s system 4% cpu 24:40.42 total

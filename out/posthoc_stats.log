@@ -1,0 +1,87 @@
+discordant {"F1xR3": {"up": 28, "aki_up": 0, "down": 5, "aki_down": 0}, "F0xR1": {"up": 55, "aki_up": 4, "down": 1, "aki_down": 0}, "F3xR2": {"up": 50, "aki_up": 3, "down": 4, "aki_down": 0}, "F6xR3": {"up": 8, "aki_up": 0, "down": 178, "aki_down": 3}, "F1xR3_expected_aki": 1.573272269318624, "F1xR3_p_k0": 0.18545313726312856, "F1xR3_ror_by_k_up_cases": {"0": 0.9563294871014797, "1": 1.0109712463297982, "2": 1.0706811583576554, "3": 1.1312296691597774, "4": 1.195317534121383, "5": 1.2672067929880635}}
+coverage {"F1xR3": {"null_sd_independent": 0.05954900428178829, "coverage": 1.0, "n": 100}, "F0xR1": {"null_sd_independent": 0.07123613496063663, "coverage": 0.99, "n": 100}, "F3xR2": {"null_sd_independent": 0.07049798758993252, "coverage": 1.0, "n": 100}, "F6xR3": {"null_sd_independent": 0.12379719479568158, "coverage": 0.97, "n": 100}}
+sens {
+ "S4 missing postoperative creatinine = no AKI (pre-specified)": {
+  "ror": 0.9625789248111569,
+  "lo": 0.8649676152405774,
+  "hi": 1.071205638413289,
+  "n": 2936,
+  "events": 91
+ },
+ "S6 transplantation included (pre-specified)": {
+  "ror": 0.9580489247626969,
+  "lo": 0.865707669884127,
+  "hi": 1.0602398178611643,
+  "n": 2712,
+  "events": 122
+ },
+ "without gynaecology (low creatinine testing)": {
+  "ror": 0.958677782872675,
+  "lo": 0.8565174496425558,
+  "hi": 1.0730231961499603,
+  "n": 2514,
+  "events": 89
+ },
+ "disease risk score, 2 df": {
+  "ror": 0.9581481826307501,
+  "lo": 0.8523321715690094,
+  "hi": 1.0771011238360597,
+  "n": 2563,
+  "events": 91
+ },
+ "reference=concord": {
+  "ror": 0.9634075306895926,
+  "lo": 0.8540553204191961,
+  "hi": 1.086761065704564,
+  "n": 2563,
+  "events": 91
+ },
+ "reference=valid25_obs": {
+  "ror": 0.9492814973597005,
+  "lo": 0.8502493934204105,
+  "hi": 1.0598482847536754,
+  "n": 2563,
+  "events": 91
+ },
+ "reference=valid75_obs": {
+  "ror": 0.9523131134443867,
+  "lo": 0.8319551264347029,
+  "hi": 1.0900831513889597,
+  "n": 2563,
+  "events": 91
+ }
+}
+fragility {'pipe_ci_excludes_1': 181, 'n': 420, 'ref_ci_excludes_1': 33, 'significance_flips': 90, 'flips_by_metric': {'auc': 35, 'twa': 29, 'binary': 17, 'minutes': 9}} 25 19
+gamma grid {'up0.0': 0.9858113280525407, 'up1.0': 1.0842079840158865, 'up2.0': 1.2672674541002382, 'up3.0': 1.5224334522261727, 'up4.0': 1.8874928971370384, 'down2.0': 0.9487613397994693, 'down4.0': 0.863546027092046, 'down8.0': 0.7795635664454479}
+null {'gamma_up': 0.0, 'median_ror': 1.004095401543799, 'p_equivalent': 0.82, 'coverage_of_1': 0.97, 'sd_lror': 0.06182460872990412, 'n': 200}
+upper_margin {'gamma_up': 1.9120624508766082, 'median_ror': 1.2385865886555174, 'p_equivalent': 0.05, 'coverage_of_1': 0.51, 'sd_lror': 0.09819805445307063, 'n': 200}
+{
+ "median_ror_by_gamma": {
+  "up0.0": 0.9858113280525407,
+  "up1.0": 1.0842079840158865,
+  "up2.0": 1.2672674541002382,
+  "up3.0": 1.5224334522261727,
+  "up4.0": 1.8874928971370384,
+  "down2.0": 0.9487613397994693,
+  "down4.0": 0.863546027092046,
+  "down8.0": 0.7795635664454479
+ },
+ "null": {
+  "gamma_up": 0.0,
+  "median_ror": 1.004095401543799,
+  "p_equivalent": 0.82,
+  "coverage_of_1": 0.97,
+  "sd_lror": 0.06182460872990412,
+  "n": 200
+ },
+ "upper_margin": {
+  "gamma_up": 1.9120624508766082,
+  "median_ror": 1.2385865886555174,
+  "p_equivalent": 0.05,
+  "coverage_of_1": 0.51,
+  "sd_lror": 0.09819805445307063,
+  "n": 200
+ },
+ "lower_margin": "reachable; not simulated"
+}
+NPROC=10 timeout 7000 .venv/bin/python -W ignore src/posthoc_stats.py  4545.68s user 126.86s system 739% cpu 10:31.67 total

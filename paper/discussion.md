@@ -2,71 +2,138 @@
 
 ## Principal findings
 
-In 3,249 patients with a high-resolution arterial waveform, artefacts were frequent events
-but a small fraction of recorded hypotension. With the processing most retrospective studies
-use — a per-minute median and a simple range filter — fewer than 1% of hypotensive minutes
-were spurious, and the association between ≥ 10 min of MAP < 65 mmHg and AKI was the same
-whether it was estimated from the monitor numbers or from a waveform-verified reference (ROR
-0.96, 95% CI 0.86–1.06; pre-specified verdict: equivalent). No filter–resolution combination
-moved the association beyond what chance allows. Artefactual hypotension was not recorded
-preferentially in patients who later developed AKI, so the differential bias we set out to
-test was not present.
+In 3,249 patients with a high-resolution arterial waveform, artefacts were frequent events but
+a small part of recorded hypotension. With the processing most retrospective studies use, a
+per-minute median and a range filter, fewer than 1% of hypotensive minutes were spurious. The
+exposure category changed in 1.2% of patients.
 
-Three choices did matter:
-- **The 7-point running median.** It created and masked hypotension. On charted data it
-  erased most exposure, and it produced the least stable associations.
-- **Unfiltered depth-weighted exposures below 55 mmHg.** Areas and time-weighted averages
-  below 55 mmHg are dominated by a few zero and flush values. The point estimates suggested
-  a large dilution of the association (ROR 0.30 for the time-weighted average), though the
-  post hoc interval was wide.
-- **Resolution.** Charting every 5–15 min classified about a fifth more patients as exposed
-  without changing the odds ratio.
+Two features of the cohort define what our main result can and cannot say:
+- **The canonical exposure was not associated with AKI after adjustment.** For ≥ 10 min below
+  65 mmHg the adjusted odds ratio was 0.94, although the crude odds ratio was 1.65.
+- **Non-differential error had almost nothing to act on.** When the reference association is
+  null, non-differential misclassification cannot attenuate it. The equivalence of the
+  pipeline and the reference (ROR 0.96) therefore tests mainly *differential* error, the
+  scenario in which artefact recorded preferentially in patients destined for AKI would
+  manufacture an association.
 
-At the level of individual episodes the picture differs from the cohort level. A recorded
-fall below 40 mmHg lasting under a minute was artefact in most cases, whereas sustained
-episodes were almost never artefact.
+That scenario was not present:
+- the 33 patients whose category changed included no AKI case;
+- spurious hypotension was unrelated to blood sampling and to AKI;
+- the equivalence verdict held under every sensitivity analysis, including the two
+  pre-specified analyses we initially omitted.
+
+Where an association was present (55 mmHg, and the slope per 10 min), the pipeline estimates
+were close to the reference but too imprecise to establish equivalence.
+
+Three processing choices mattered more than the filter did:
+- **The 7-point running median** created spurious hypotension and masked a fifth of true
+  hypotension. On charted data it erased most exposure.
+- **Unfiltered area-based exposures below 55 mmHg** were dominated by zero and flush values in a
+  few patients: over a third of the area was artefact.
+- **Resolution** classified a fifth more patients as exposed, without a detectable change in the
+  odds ratio.
 
 ## Comparison with previous work
 
-**Pasma et al.**[@pasma2020] applied eight filters to per-minute data. The filter changed the
-measured incidence of hypotension up to twofold but changed the association with myocardial
-injury little. Their comparison was between filters; ours was against an external
-waveform-verified reference, across resolutions and exposure metrics, with an equivalence
-criterion and a test for differential error. The two studies agree on duration-based
-exposure and on the per-minute median, and they disagree on the 7-point median. Pasma et al.
-included it among their filters. We found that it distorts exposure substantially even when
-the ratio of odds ratios happens to stay near 1.
+**Filters and resolution.** Pasma et al. compared eight filters on per-minute data. The filter
+changed the measured incidence of hypotension up to twofold but changed the association with
+myocardial injury little.[@pasma2020] Jacobsson et al. showed, against a waveform reference,
+that coarse sampling inflates measured hypotension, and extrapolated an effect on
+outcomes.[@jacobsson] Our study adds three things:
+- an external, waveform-referenced comparator at every resolution;
+- a direct estimate of the outcome effect, with a pre-specified equivalence criterion;
+- a test for differential error.
 
-**Jacobsson et al.**[@jacobsson] showed against a waveform reference that coarse sampling
-inflates measured hypotension, and they extrapolated an effect on outcome associations. We
-reproduced the inflation (42% to 53% exposed) but could not detect the outcome effect. The
-odds ratios with 5- and 15-min charting were within 10% of those at 1-min resolution, with
-intervals that included both no effect and moderate effects.
+We agree with both studies on duration-based exposures. Unlike Pasma et al., we found that the
+7-point median distorts exposure substantially, even where the ratio of odds ratios happened
+to stay near 1. The AWAKE trial showed that continuous arterial monitoring changes the
+*measured* and *treated* hypotension at induction.[@kouz] Our resolution results are the
+retrospective counterpart: the same patients look different at different sampling rates.
 
-**Cuff and arterial pressure.** Wax et al.[@wax] and, recently, a preprint of a MOVER cohort
-study of cuff–arterial discordance[@liu] interpreted disagreement between cuff and arterial pressure
-as clinical information. Our observation that arterial artefact rises eightfold in the minute
-before a cuff reading identifies a measurement mechanism that generates exactly such
-discordance, and is partly explained by occlusion of the cannulated arm. Studies of discordance should
-exclude arterial values from the minute before each cuff reading, or show that their results
-survive that exclusion.
+**Cuff and arterial pressure.** Wax et al.,[@wax] and more recently a preprint from the MOVER
+cohort,[@liu] treated disagreement between cuff and arterial pressure as clinical information.
+We found a measurement mechanism that generates such disagreement: arterial artefact rose
+sixfold during the cuff cycle, mostly as a non-pulsatile trace. Several features point to
+occlusion of the cannulated arm in a subset of patients:
+- the excess was larger with radial than with lower-limb catheters;
+- it was larger on the right than on the left;
+- it was present at regularly cycled readings;
+- flush labels barely rose.
 
-**Artefact detection.** Earlier work compared algorithmic and machine-learning artefact
-detection in anaesthesia records against human annotation.[@maleczek; @pasma2021] A recent
-scoping review found no agreed reference for arterial artefact.[@bergmann] Our classifier
-uses the waveform only to decide whether a monitor value is trustworthy. This sidesteps
-calibration differences between monitor and waveform and can be reproduced on any dataset
-that stores both.
+It was not the whole story. A smaller excess with pedal and femoral catheters suggests other
+activity around cuff cycles, such as handling of the arm or the line. Studies of discordance
+should exclude arterial values from the cuff cycle, or show that their results survive that
+exclusion.
 
-## A methodological lesson
+**Artefact detection.** Earlier work compared algorithmic and machine-learning detection with
+human annotation of stored values,[@maleczek; @pasma2021] and a scoping review found no
+agreed reference for arterial artefact.[@bergmann] Our classifier uses the waveform only to
+decide whether a monitor value can be trusted. It can be reproduced on any dataset that
+stores both.
 
-The usual percentile bootstrap interval for a difference between two estimates from the same
-patients was badly anti-conservative here. Under a permuted outcome it covered the true value
-in only half of the trials for the primary contrast. The reason is structural: when two
-exposure definitions disagree in a few dozen patients, the bootstrap distribution of their
-contrast is spiky and its central 95% is too narrow. Multiverse and specification-curve
-analyses routinely compare highly correlated specifications in exactly this way. Without the
-null calibration, which we pre-specified only after it surfaced in the dry run, several cells
-in this study would have been reported as significant differences that do not exist. We
-recommend that such analyses check their intervals against permuted outcomes before
-unblinding.
+## Implications
+
+**For investigators:**
+- Use a per-minute median with a range filter, or a rule such as F3. Report the resolution as
+  carefully as the threshold.
+- Do not use running-median smoothing to estimate exposure.
+- Do not compute area- or time-weighted exposures below 55 mmHg from unfiltered data.
+- In paired multiverse comparisons, check the operating characteristics of the intervals
+  before unblinding, at the null and at the decision margins. Permutation alone checks only
+  the null. Without this check, our percentile intervals would have covered the truth in half
+  of null datasets.
+
+**For clinicians and alarm design:**
+- Most very brief, very deep recorded falls proved to be artefact in retrospect. Within the
+  first 10–30 s, a fall to 20–39 mmHg was artefact more often than not. By 60 s, more than
+  nine in ten were real.
+- A fall below 20 mmHg remained artefact in a third of cases even after 2 min.
+- These are retrospective probabilities. They do not justify delaying treatment. A sudden fall
+  should prompt an immediate look at the arterial waveform, the plethysmograph and end-tidal
+  carbon dioxide.
+- A system could use them to *annotate* a probable artefact, never to *suppress* an alarm. The
+  simple drop rule we derived cannot even separate deep artefacts from deep real events
+  (specificity 0.07 below 40 mmHg).
+- Where possible, place the cuff on the limb opposite an arterial line, consistent with
+  standard guidance on arterial pressure measurement.[@saugel]
+
+## Strengths and limitations
+
+**Strengths:**
+- The reference comes from the waveform recorded alongside the numbers, and it never replaces
+  monitor values.
+- The protocol was frozen after a permuted dry run. Every later change is documented.
+- The validity of the reference was checked against independent signals: cuff pressure,
+  pulse oximetry and ECG.
+- The data are public and the code is released.
+
+**Limitations:**
+- **No human rater adjudicated the reference.** The AI rater shares its model family with the
+  classifier's designer and sees only the waveform. A 400-snippet set with a hidden key is
+  released for human adjudication, and it should show the monitor value as well as the
+  waveform.
+- **The classifier cannot see some important errors.** These are:
+  - levelling errors and zero drift (about 7 mmHg per 10 cm, which matters in lateral and
+    tilted positions);
+  - most over-damping;
+  - partial occlusion;
+  - very short flushes.
+
+  Our reference is therefore *waveform-screened*, not error-free.
+- **The monitoring period started a median of 10 min after the start of anaesthesia.** It
+  therefore missed most post-induction hypotension,[@sudfeld] which limits comparison with
+  studies that use cuff values from induction onwards.
+- **Single centre.** The data come from one centre in 2016–2017, mainly general and thoracic
+  surgery, with a low incidence of creatinine-defined AKI (3.6%).
+- **AKI ascertainment.** AKI was ascertained from creatinine only, without urine output, and
+  depended on postoperative testing, which varied by department. Haemodilution may have hidden
+  some AKI.
+- **Few events.** With 91 events, the precision of each odds ratio is modest. The ratio of two
+  estimates in the same patients is far more precise, but our equivalence result rests on few
+  discordant patients and may not transfer to cohorts with more artefact or a stronger
+  association.
+- **Charting was simulated.** Simulated charting is a random sample of monitor values, not the
+  selective charting of real records.[@kool]
+- **Practice-dependent frequencies.** Artefact frequencies depend on local practice, so the
+  absolute numbers will not transfer. The mechanisms and the direction of the resolution and
+  smoothing effects should.

@@ -330,3 +330,24 @@ heatmap (Figure 3) and forest plot (Figure 6) were added after unblinding.
 **Post hoc (not pre-specified).** `src/posthoc_cuff_site.py` compares the peri-cuff artefact
 excess between radial and pedal/femoral catheters (an arm cuff cannot occlude the latter) and
 between right and left radial catheters, prompted by the C3 result.
+
+**Round-1 review changes (2026-10-26, after unblinding).** Three AI peer reviewers
+(statistics, clinical anaesthesia, signal processing/reproducibility; `docs/reviews/`) led to:
+- *Cuff timing fixed.* `n_NIBP_MBP` had been shifted by the arterial-numerics lag
+  (pipelines.py, figures.py). Cuff values are not delayed like the arterial numerics, so the
+  shift was removed. This affects only C3, V3 and Figure 2 (outcome-free). The primary
+  reference was re-checked after re-running `run_all.py`: OR_ref and OR_pipe for F1 × R3 are
+  identical to the frozen run (0.9403 and 0.8992).
+- *Reference variants added (sensitivity only; primary unchanged).* `valid25_obs` and
+  `valid75_obs` apply the minute-validity rule to observed valid windows only (the primary
+  counts bridged values as valid by design of bridging, so the original valid25/valid75
+  barely tested the rule). `concord` also removes valid windows where monitor MAP and the
+  waveform mean differ by > 10 mmHg.
+- *Pre-specified S4 and S6 had not been run.* They were omitted from `analysis.py` by error and
+  are now run in `src/posthoc_stats.py` with the A15 interval.
+- *Post hoc analyses* in `src/posthoc_review.py`, `src/posthoc_models.py`,
+  `src/posthoc_stats.py` and `src/validate_v1_sweep.py`: discordant-patient table, TOST
+  operating characteristics by simulation, split-sample interval coverage, department
+  restriction, disease-risk-score adjustment, crude-to-adjusted OR ladder, real-time episode
+  table, pulse oximetry during deep episodes, cuff subtype/regularity/position, rule
+  performance by nadir, injection sweep.

@@ -1,10 +1,14 @@
 {
+ "n_rated": 152,
  "n": 131,
  "agree": 0.9770992366412213,
  "kappa": 0.9536938847649346,
- "sens_alg_vs_ai": 0.95,
- "spec_alg_vs_ai": 1.0,
- "guard_rated_artefact": 0.6842105263157895,
+ "artefact_share_in_subset": 0.4351145038167939,
+ "alg_artefact_rated_artefact": 1.0,
+ "alg_valid_rated_artefact": 0.04054054054054054,
+ "alg_valid_n": 74,
+ "alg_valid_low_strata_n": 36,
  "guard_n": 19,
+ "guard_rated_artefact": 0.6842105263157895,
  "unsure": 2
 }

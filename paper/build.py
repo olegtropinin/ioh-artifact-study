@@ -10,6 +10,24 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 LANG = sys.argv[1] if len(sys.argv) > 1 else 'en'
+SUPCAPS = {
+    'en': ['Figure S1. Flow of patients.', 'Figure S2. Specification curve of 420 pipeline specifications.',
+           'Figure S3. Probability that a recorded episode is waveform-flagged, by final duration and nadir.',
+           'Figure S4. Ratio of odds ratios by filter, exposure metric and threshold (post hoc display).'],
+    'ru': ['Рисунок S1. Отбор пациентов.', 'Рисунок S2. Кривая спецификаций: 420 вариантов обработки.',
+           'Рисунок S3. Вероятность того, что эпизод помечен как артефакт, по длительности и минимуму.',
+           'Рисунок S4. Отношение отношений шансов по фильтру, метрике и порогу (апостериорно).'],
+}
+CAPTIONS = {
+    'en': ['Recorded hypotension that is waveform-flagged artefact: waveform and monitor MAP.',
+           'Arterial artefact around non-invasive cuff measurements, by artefact type.',
+           'Spurious minutes among recorded minutes with MAP < 65 mmHg, by filter and resolution.',
+           'Ratio of odds ratios for AKI for every filter × resolution combination.'],
+    'ru': ['Записанная гипотония, помеченная по кривой как артефакт: кривая и САД монитора.',
+           'Артефакты артериальной кривой вокруг измерений манжетой, по типам артефакта.',
+           'Ложные минуты среди записанных минут с САД < 65 мм рт. ст. по фильтрам и разрешению.',
+           'Отношение отношений шансов ОПП для каждой комбинации фильтра и разрешения.'],
+}
 
 
 def read(name):
@@ -61,19 +79,30 @@ def number(text, R):
 def main():
     R = refs()
     sfx = '' if LANG == 'en' else '_ru'
-    body = [read(f'front{sfx}.md'),
-            '# Introduction\n', section(read(f'intro{sfx}.md'), True),
-            '# Methods\n', section(read(f'methods{sfx}.md'), True),
-            '# Results\n', section(read(f'results_descriptive{sfx}.md'), True),
-            read(f'results_outcome{sfx}.md'),
-            '# Discussion\n', section(read(f'discussion{sfx}.md'), True),
-            section(read(f'discussion_draft{sfx}.md'), True),
-            read(f'back{sfx}.md')]
+    body = [read(f'front{sfx}.md'), read(f'intro{sfx}.md'), read(f'methods{sfx}.md'),
+            read(f'results{sfx}.md'), read(f'discussion{sfx}.md'), read(f'back{sfx}.md')]
     text = '\n'.join(body)
+    text = re.sub(r'(?m)^(?!\s*[-*] |\s*\d+\. |\s*$|\s*\|)(.+)\n(\s*(?:- |\d+\. ))', r'\1\n\n\2', text)
     text, order = number(text, R)
     head = '# References\n' if LANG == 'en' else '# Литература\n'
     text += '\n' + head + '\n' + '\n'.join(f'{i}. {R[k]}' for i, k in enumerate(order, 1)) + '\n'
     text += '\n' + read(f'tables{sfx}.md')
+    caps = CAPTIONS[LANG]
+    figs = ['fig1_examples', 'fig5_nibp_cuff', 'fig2_spurious', 'fig6_forest']
+    text += '\n# ' + ('Figures' if LANG == 'en' else 'Рисунки') + '\n\n'
+    text += '\n\n'.join(f'![{c}](figures/{f}{sfx}.png){{width=100%}}' for f, c in zip(figs, caps)) + '\n'
+    # supplement: methods, tables, figures, protocol (citations numbered with the main list)
+    sup = read(f'supp_methods{sfx}.md') + '\n' + read(f'supplement_tables{sfx}.md')
+    sup += '\n# ' + ('Supplementary figures' if LANG == 'en' else 'Дополнительные рисунки') + '\n\n'
+    for f, cap in zip(['figS1_flow', 'fig3_spec_curve', 'fig4_episode_probability', 'fig3_depth_heatmap'],
+                      SUPCAPS[LANG]):
+        sup += f'![{cap}](figures/{f}{sfx}.png){{width=90%}}\n\n'
+    proto = open(os.path.join(HERE, '..', 'docs', 'protocol.md')).read()
+    sup += '\n# ' + ('Supplementary Protocol' if LANG == 'en' else 'Протокол (на английском)') + '\n\n' + \
+        re.sub(r'(?m)^#', '##', proto)
+    sup = sup.replace('→', '->').replace('∈', ' in ')
+    with open(os.path.join(HERE, f'supplement{sfx}.md'), 'w') as fh:
+        fh.write(sup)
     out = os.path.join(HERE, f'manuscript{sfx}.md')
     with open(out, 'w') as fh:
         fh.write(text)

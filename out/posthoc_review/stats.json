@@ -1,0 +1,187 @@
+{
+ "discordant": {
+  "F1xR3": {
+   "up": 28,
+   "aki_up": 0,
+   "down": 5,
+   "aki_down": 0
+  },
+  "F0xR1": {
+   "up": 55,
+   "aki_up": 4,
+   "down": 1,
+   "aki_down": 0
+  },
+  "F3xR2": {
+   "up": 50,
+   "aki_up": 3,
+   "down": 4,
+   "aki_down": 0
+  },
+  "F6xR3": {
+   "up": 8,
+   "aki_up": 0,
+   "down": 178,
+   "aki_down": 3
+  },
+  "F1xR3_expected_aki": 1.573272269318624,
+  "F1xR3_p_k0": 0.18545313726312856,
+  "F1xR3_ror_by_k_up_cases": {
+   "0": 0.9563294871014797,
+   "1": 1.0109712463297982,
+   "2": 1.0706811583576554,
+   "3": 1.1312296691597774,
+   "4": 1.195317534121383,
+   "5": 1.2672067929880635
+  }
+ },
+ "calibrated_coverage_independent": {
+  "F1xR3": {
+   "null_sd_independent": 0.05954900428178829,
+   "coverage": 1.0,
+   "n": 100
+  },
+  "F0xR1": {
+   "null_sd_independent": 0.07123613496063663,
+   "coverage": 0.99,
+   "n": 100
+  },
+  "F3xR2": {
+   "null_sd_independent": 0.07049798758993252,
+   "coverage": 1.0,
+   "n": 100
+  },
+  "F6xR3": {
+   "null_sd_independent": 0.12379719479568158,
+   "coverage": 0.97,
+   "n": 100
+  }
+ },
+ "sensitivity": {
+  "S4 missing postoperative creatinine = no AKI (pre-specified)": {
+   "ror": 0.9625789248111569,
+   "lo": 0.8649676152405774,
+   "hi": 1.071205638413289,
+   "n": 2936,
+   "events": 91
+  },
+  "S6 transplantation included (pre-specified)": {
+   "ror": 0.9580489247626969,
+   "lo": 0.865707669884127,
+   "hi": 1.0602398178611643,
+   "n": 2712,
+   "events": 122
+  },
+  "without gynaecology (low creatinine testing)": {
+   "ror": 0.958677782872675,
+   "lo": 0.8565174496425558,
+   "hi": 1.0730231961499603,
+   "n": 2514,
+   "events": 89
+  },
+  "disease risk score, 2 df": {
+   "ror": 0.9581481826307501,
+   "lo": 0.8523321715690094,
+   "hi": 1.0771011238360597,
+   "n": 2563,
+   "events": 91
+  },
+  "reference=concord": {
+   "ror": 0.9634075306895926,
+   "lo": 0.8540553204191961,
+   "hi": 1.086761065704564,
+   "n": 2563,
+   "events": 91
+  },
+  "reference=valid25_obs": {
+   "ror": 0.9492814973597005,
+   "lo": 0.8502493934204105,
+   "hi": 1.0598482847536754,
+   "n": 2563,
+   "events": 91
+  },
+  "reference=valid75_obs": {
+   "ror": 0.9523131134443867,
+   "lo": 0.8319551264347029,
+   "hi": 1.0900831513889597,
+   "n": 2563,
+   "events": 91
+  }
+ },
+ "epv_full": 4.333333333333333,
+ "monitor_waveform_discordance": {
+  "mean": 0.019512917841515563,
+  "median": 0.004818383988139363,
+  "p90": 0.0383899845416012
+ },
+ "lag_s": {
+  "2": 58,
+  "4": 2020,
+  "6": 1152,
+  "8": 19
+ },
+ "equivalent_pointwise": 25,
+ "equivalent_simultaneous": 19,
+ "borderline_cells": [
+  {
+   "filter": "F0",
+   "res": "R2",
+   "ror": 1.0553,
+   "ror_lo": 0.8923,
+   "ror_hi": 1.2481
+  },
+  {
+   "filter": "F1",
+   "res": "R2",
+   "ror": 1.0556,
+   "ror_lo": 0.8927,
+   "ror_hi": 1.2482
+  },
+  {
+   "filter": "F2",
+   "res": "R2",
+   "ror": 1.0601,
+   "ror_lo": 0.8979,
+   "ror_hi": 1.2515
+  },
+  {
+   "filter": "F4",
+   "res": "R2",
+   "ror": 1.0576,
+   "ror_lo": 0.8945,
+   "ror_hi": 1.2504
+  }
+ ],
+ "fragility": {
+  "pipe_ci_excludes_1": 181,
+  "n": 420,
+  "ref_ci_excludes_1": 33,
+  "significance_flips": 90,
+  "flips_by_metric": {
+   "auc": 35,
+   "twa": 29,
+   "binary": 17,
+   "minutes": 9
+  }
+ },
+ "o5_separate_models_F0xR1": {
+  "spurious_hypo": {
+   "or_per_log1p": 0.5891380604067058,
+   "lo": 0.12156579730157192,
+   "hi": 2.855109429823871,
+   "sd": 0.14197826008913936,
+   "or_per_sd": 0.9276322116065467,
+   "lo_sd": 0.7414179825490413,
+   "hi_sd": 1.1606159282131183
+  },
+  "spurious_hyper_negative_control": {
+   "or_per_log1p": 2.037659173992409,
+   "lo": 0.7930324433794609,
+   "hi": 5.235668406782565,
+   "sd": 0.21355146386308269,
+   "or_per_sd": 1.1641675612036455,
+   "lo_sd": 0.9516854640577632,
+   "hi_sd": 1.4240903762260086
+  }
+ }
+}

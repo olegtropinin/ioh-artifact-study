@@ -13,6 +13,7 @@ FILTERS = ['F0', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6']
 RES = {'R1': [0], 'R2': [0], 'R3': [0], 'R4': [0, 1, 2, 3, 4], 'R5': [0, 3, 6, 9, 12]}
 BRIDGE_MAX = 90                  # windows (3 min)
 BRIDGE_SIDE = 15                 # windows (30 s) of valid data needed on each side
+DISCORD_MMHG = 10       # monitor vs waveform-mean disagreement flagged in valid windows
 
 
 # ---------------------------------------------------------------- alignment, period
@@ -207,7 +208,8 @@ def run_case(d, anestart, aneend):
     m = shift(d['n_ART_MBP'], lag)
     s = shift(d['n_ART_SBP'], lag)
     dd = shift(d['n_ART_DBP'], lag)
-    nibp = shift(d['n_NIBP_MBP'], lag)
+    # cuff values are not delayed like the arterial numerics: no lag shift (post-unblinding fix, review G-M2)
+    nibp = d['n_NIBP_MBP']
     a0 = int(max(0, anestart) // 2)
     a1 = int(min(len(lab0), aneend // 2))
     per = first_last_run(lab0 == 0, a0, a1)
@@ -269,6 +271,19 @@ def run_case(d, anestart, aneend):
         v, w = sample_ref(r, 'R3', 0, mv)
         for thr in THRESHOLDS:
             rows.append(('ref', name, 'R3', 0, thr) + exposure(v, w, thr))
+    # post-unblinding variants (review G-M3, G-M4): minute validity counted on observed windows
+    # only, and a reference that also drops valid windows where monitor MAP and the waveform mean
+    # disagree by > 10 mmHg
+    for name, mv in [('valid25_obs', 0.25), ('valid75_obs', 0.75)]:
+        v, w = sample_ref(variants['unbridged'], 'R3', 0, mv)
+        for thr in THRESHOLDS:
+            rows.append(('ref', name, 'R3', 0, thr) + exposure(v, w, thr))
+    with np.errstate(invalid='ignore'):
+        disc = (lab == 0) & (np.abs(mm - wm) > DISCORD_MMHG)
+    lab_c = np.where(disc, 7, lab)
+    v, w = sample_ref(reference_2s(mm, lab_c, support, True)[0], 'R3')
+    for thr in THRESHOLDS:
+        rows.append(('ref', 'concord', 'R3', 0, thr) + exposure(v, w, thr))
 
     # O2 minute categories and O5 typing (T = 65), filters x R1/R2/R3
     o2 = []
@@ -314,18 +329,21 @@ def run_case(d, anestart, aneend):
         L = lab[a:b]
         pre = x[max(0, a - 15):a]
         near = nb_ev[(nb_ev >= a - 90) & (nb_ev < b + 90)]
+        near60 = nb_ev[(nb_ev >= a - 30) & (nb_ev < b + 30)]
         eps.append(dict(start=int(a), dur_s=2 * (b - a), nadir=float(np.nanmin(x[a:b])),
                         pre30_max=float(np.nanmax(pre)) if np.isfinite(pre).any() else np.nan,
                         art_frac=float(np.isin(L, ARTEFACT).mean()),
                         guard_frac=float((L == 6).mean()), valid_frac=float((L == 0).mean()),
                         lab_mode=int(np.bincount(L, minlength=7).argmax()),
-                        nibp_near=float(nb[near[np.argmin(np.abs(near - a))]]) if len(near) else np.nan))
+                        nibp_near=float(nb[near[np.argmin(np.abs(near - a))]]) if len(near) else np.nan,
+                        nibp_near60=float(nb[near60[np.argmin(np.abs(near60 - a))]]) if len(near60) else np.nan))
 
     # descriptive: label fractions, artefact runs, NIBP-cuff (C3), physiology during nonpulsatile (V3ii)
     hr = shift(d['n_HR'], lag)[sl]
     ph = shift(d['n_PLETH_HR'], lag)[sl]
     np_w = lab == 4
     desc = dict(lag=lag, period_min=n, support_min=int((~miss_min).sum()),
+                disc_frac=float(disc[lab == 0].mean()) if (lab == 0).any() else np.nan,
                 **{f'frac_{k}': float((lab == i).mean()) for i, k in enumerate(
                     ['valid', 'missing', 'zero', 'high', 'nonpulsatile', 'noise', 'guard'])},
                 **{f'runs_{k}': int(len(runs(lab == i)[0])) for i, k in [(2, 'zero'), (3, 'high'), (4, 'nonpulsatile'), (5, 'noise')]},

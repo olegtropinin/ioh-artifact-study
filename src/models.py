@@ -109,9 +109,10 @@ def fit_exposure(expo, df, y, reduced=False):
 
 # ---------------------------------------------------------------- cohort
 
-def cohort():
+def cohort(skip=()):
     """Analysis set: one case per subject, eligible for AKI analysis, >= 30 min reference
-    monitoring. Returns covariate frame indexed by caseid."""
+    monitoring. Returns covariate frame indexed by caseid. `skip` names selection steps to omit
+    (used only by post hoc sensitivity analyses)."""
     c = pd.read_pickle(os.path.join(ROOT, 'data', 'cohort_raw.pkl')).set_index('caseid')
     desc = pd.read_pickle(os.path.join(CACHE, 'desc.pkl')).set_index('caseid')
     x = pd.read_pickle(os.path.join(CACHE, 'exposures.pkl'))
@@ -127,6 +128,8 @@ def cohort():
              ('baseline eGFR >= 15', c.egfr >= 15),
              ('creatinine within 7 days after surgery', c.cr_max7d.notna())]
     for name, m in steps:
+        if name in skip:
+            continue
         c = c[m.loc[c.index]]
         flow.append((name, len(c)))
     c = c.sort_index()

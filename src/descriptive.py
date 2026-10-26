@@ -154,6 +154,14 @@ def main():
         p, lo, hi = wilson((g.nibp_near >= 70).sum(), len(g))
         v3[k] = dict(n=len(g), p_nibp_ge70=p, lo=lo, hi=hi, nibp_median=float(g.nibp_near.median()))
     S['v3_nibp'] = v3
+    # post-unblinding (review): cuff value within +/-60 s, overall and among deep episodes only
+    for tag, sub in [('v3_nibp60', e), ('v3_nibp60_nadir_lt40', e[e.nadir < 40])]:
+        g0 = sub[sub.nibp_near60.notna()]
+        out = {}
+        for k, g in g0.groupby('cls'):
+            p, lo, hi = wilson((g.nibp_near60 >= 70).sum(), len(g))
+            out[k] = dict(n=len(g), p_nibp_ge70=p, lo=lo, hi=hi, nibp_median=float(g.nibp_near60.median()))
+        S[tag] = out
     S['v3_nonpuls_ecg'] = dict(windows=int(c.nonpuls_n.sum()),
                                ecg_ok=float(c.nonpuls_ecg_ok.sum() / c.nonpuls_n.sum()),
                                pleth_ok=float(c.nonpuls_pleth_ok.sum() / c.nonpuls_n.sum()))
@@ -174,7 +182,7 @@ def main():
     with open(os.path.join(OUT, 'summary.json'), 'w') as fh:
         json.dump(S, fh, indent=1, default=str)
     e.to_pickle(os.path.join(OUT, 'episodes_labelled.pkl'))
-    print(json.dumps({k: S[k] for k in ('n_cases', 'o1_time_fraction', 'o6_episodes', 'o6_rule', 'v3_nibp', 'v3_nonpuls_ecg', 'v3_af', 'c3_nibp')}, indent=1, default=str))
+    print(json.dumps({k: S[k] for k in ('n_cases', 'o1_time_fraction', 'o6_episodes', 'o6_rule', 'v3_nibp', 'v3_nibp60', 'v3_nibp60_nadir_lt40', 'v3_nonpuls_ecg', 'v3_af', 'c3_nibp')}, indent=1, default=str))
     print(o2t[['res', 'filter', 'low_min', 'spurious_frac', 'lo', 'hi', 'indeterminate_frac', 'masked_per_low']].round(4).to_string())
 
 

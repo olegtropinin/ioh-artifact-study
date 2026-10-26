@@ -1,13 +1,18 @@
 ## Conclusions
 
-Arterial-line artefacts are frequent events but a small part of recorded hypotension. With
-per-minute medians and a simple range filter, they do not bias the association between
-≥ 10 min of MAP < 65 mmHg and AKI, and they are not recorded preferentially in patients who
-develop AKI. Investigators should avoid running-median smoothing and unfiltered
-depth-weighted exposures, and should report resolution as carefully as thresholds.
-Clinicians and automated systems should treat a brief, very deep fall in recorded pressure as
-probable artefact until the waveform says otherwise. The cuff should be placed on the
-arm opposite an arterial line where possible.
+Arterial-line artefacts were frequent events but a small part of recorded hypotension. In this
+cohort, ≥ 10 min of MAP below 65 mmHg was not independently associated with AKI. With
+per-minute medians and a range filter, artefact handling neither created nor removed an
+association, and artefact was not recorded preferentially in patients who developed AKI.
+
+Investigators should:
+- avoid running-median smoothing;
+- avoid unfiltered area-based exposures;
+- report resolution as carefully as thresholds.
+
+A brief, very deep recorded fall is often artefact. It should prompt an immediate look at the
+waveform, not a delay in treatment. Arterial artefact clusters in the cuff cycle, consistent
+with occlusion of the cannulated arm.
 
 # Declarations
 
@@ -30,6 +35,8 @@ raters.
 substantial parts of this work, under the author's direction:
 - writing the analysis code;
 - an adversarial review of the methods before the protocol was frozen;
+- three simulated peer reviews of the draft (statistical, clinical, signal processing), which
+  led to the post-unblinding changes listed in the Supplementary Protocol;
 - drafting the manuscript.
 
 An instance of the same AI system was also used as the blinded secondary rater of waveform
@@ -44,37 +51,38 @@ Hospital for making the dataset openly available.
 
 # Figure legends
 
-**Figure 1.** Examples of recorded hypotension that is artefact. Each panel shows the 500 Hz
-arterial waveform (grey) and the lag-aligned 2-s monitor MAP (orange) around the start of a
-recorded MAP < 65 mmHg (time 0). Shaded windows are labelled artefact or guard by the
-classifier. The panels show, from top to bottom:
-- transducer open to air (zeroing);
-- closed stopcock during blood sampling;
-- fast flush followed by recovery;
+**Figure 1.** Recorded hypotension that is waveform-flagged artefact. Each panel shows the
+500 Hz arterial waveform (grey) and the lag-aligned 2-s monitor MAP (orange) around the start
+of a recorded MAP below 65 mmHg (time 0). Shaded windows are labelled artefact or guard. From
+top to bottom:
+- a transducer open to air (zeroing);
+- a stopcock turned off to the patient during blood sampling;
+- a fast flush followed by recovery;
 - a non-pulsatile trace with a cuff reading within 3 min.
 
-**Figure 2.** Arterial artefact around non-invasive cuff measurements. The percentage of 2-s
-arterial windows labelled artefact is plotted against time relative to the moment a new cuff
-value appears (15,643 readings with a complete window).
+**Figure 2.** Arterial artefact around non-invasive cuff measurements, by artefact type. The
+plot shows the percentage of 2-s arterial windows with each label, by time relative to the
+moment a new cuff value appears (14,307 readings with a complete −300 to +30 s window).
 
-**Figure 3.** Spurious minutes among recorded minutes with MAP < 65 mmHg, by filter
-(F0–F6) and resolution (2-s, one value per minute, 1-min median). Orange bars show spurious
-minutes (reference ≥ 65 mmHg), with patient-cluster bootstrap 95% CIs. Blue bars show
-indeterminate minutes (no valid reference), which were never counted as artefact.
+**Figure 3.** Spurious minutes among recorded minutes with MAP below 65 mmHg, by filter and
+resolution: R1, 2-s stream; R2, one value per minute; R3, 1-min median. Orange: spurious
+(reference ≥ 65 mmHg), with patient-cluster bootstrap 95% CI. Blue: indeterminate (no valid
+reference), never counted as artefact.
 
-**Figure 4.** Probability that a recorded episode of MAP < 65 mmHg is waveform-flagged
-artefact, by episode duration and nadir (106,725 episodes in 3,123 patients).
+**Figure 4.** Ratio of odds ratios for AKI (≥ 10 min below 65 mmHg) for every filter ×
+resolution combination, each against the reference at the same resolution.
+- Points: ratio of odds ratios.
+- Thin lines: 95% CI, log ROR ± 1.96 × max(bootstrap SE, permutation-null SD).
+- Wide bands: simultaneous 95% bands over 35 cells.
+- Grey: equivalence margin 0.80–1.25.
 
-**Figure 5.** Ratio of odds ratios for AKI (≥ 10 min MAP < 65 mmHg) for every filter ×
-resolution combination, each against the reference at the same resolution. Thin lines show
-95% CIs (log ROR ± 1.96 × max(bootstrap SE, permutation-null SD)). Wide bands show
-simultaneous 95% bands over the 35 cells. Grey shows the equivalence margin of 0.80–1.25.
-
-**Figure 6.** Ratio of odds ratios at the 1-min median resolution by filter, exposure metric
-and threshold. Orange cells: ROR < 1; blue cells: ROR > 1. AUC, area under the threshold; TWA, time-weighted average below the
-threshold.
-
-**Figure S1.** Flow of patients (see Results for counts).
+**Figure S1.** Flow of patients.
 
 **Figure S2.** Specification curve: ratios of odds ratios for all 420 pipeline
-specifications, sorted. The lower panel marks the filter, resolution and threshold of each.
+specifications, sorted. The lower panel marks the filter, resolution and threshold.
+
+**Figure S3.** Probability that a recorded episode is waveform-flagged, by final duration and
+nadir (the data of Table 2).
+
+**Figure S4.** Ratio of odds ratios at the 1-min median resolution by filter, exposure metric
+and threshold (post hoc display). Orange: ROR < 1; blue: ROR > 1.

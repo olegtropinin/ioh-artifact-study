@@ -1,4 +1,4 @@
-# Verified references (Crossref / PubMed, 2026-10-26)
+# Verified references (Crossref / PubMed, 2026-10-26; sun–gardner added after round-1 review)
 
 - [vitaldb] Lee HC, Park Y, Yoon SB, Yang SM, Park D, Jung CW. VitalDB, a high-fidelity multi-parameter vital signs database in surgical patients. Sci Data. 2022;9(1):279. doi:10.1038/s41597-022-01411-5
 - [strobe] von Elm E, Altman DG, Egger M, Pocock SJ, Gøtzsche PC, Vandenbroucke JP. The Strengthening the Reporting of Observational Studies in Epidemiology (STROBE) statement: guidelines for reporting observational studies. Lancet. 2007;370(9596):1453-7. doi:10.1016/S0140-6736(07)61602-X
@@ -30,6 +30,13 @@
 - [harrell] Harrell FE Jr. Regression modeling strategies. 2nd ed. Cham: Springer; 2015. doi:10.1007/978-3-319-19425-7
 - [maleczek] Maleczek M, Laxar D, Kapral L, Kuhrn M, Abulesz YT, Dibiasi C, et al. A comparison of five algorithmic methods and machine learning pattern recognition for artifact detection in electronic records of five different vital signs: a retrospective analysis. Anesthesiology. 2024;141(1):32-43. doi:10.1097/ALN.0000000000004971
 - [bergmann] Bergmann T, Vakitbilir N, Nemoga-Stout X, Sainbhi AS, Stein KY, Silvaggio N, et al. Artifact management methodologies for arterial blood pressure signals: a systematic scoping review of human and animal literature. Physiol Rep. 2025;13(19):e70533. doi:10.14814/phy2.70533
+
+- [sun] Sun LY, Wijeysundera DN, Tait GA, Beattie WS. Association of intraoperative hypotension with acute kidney injury after elective noncardiac surgery. Anesthesiology. 2015;123(3):515-23. doi:10.1097/ALN.0000000000000765
+- [sudfeld] Südfeld S, Brechnitz S, Wagner JY, Reese PC, Pinnschmidt HO, Reuter DA, et al. Post-induction hypotension and early intraoperative hypotension associated with general anaesthesia. Br J Anaesth. 2017;119(1):57-64. doi:10.1093/bja/aex127
+- [saugel] Saugel B, Kouz K, Meidert AS, Schulte-Uentrop L, Romagnoli S. How to measure blood pressure using an arterial catheter: a systematic 5-step approach. Crit Care. 2020;24(1):172. doi:10.1186/s13054-020-02859-w
+- [kouz] Kouz K, Wegge M, Flick M, Bergholz A, Moll-Khosrawi P, Nitzschke R, et al. Continuous intra-arterial versus intermittent oscillometric arterial pressure monitoring and hypotension during induction of anaesthesia: the AWAKE randomised trial. Br J Anaesth. 2022;129(4):478-86. doi:10.1016/j.bja.2022.06.027
+- [wesselink] Wesselink EM, Kappen TH, Torn HM, Slooter AJC, van Klei WA. Intraoperative hypotension and the risk of postoperative adverse outcomes: a systematic review. Br J Anaesth. 2018;121(4):706-21. doi:10.1016/j.bja.2018.04.036
+- [gardner] Gardner RM. Direct blood pressure measurement—dynamic response requirements. Anesthesiology. 1981;54(3):227-36. doi:10.1097/00000542-198103000-00010
 
 Pasma 2020 abstract (verbatim numbers): 2,988 procedures; 8 filters; MAP<50 incidence 24% (7-point median) to 55% (none); MAP<65 76–90%; standardised OR for myocardial injury 1.16 (1.07–1.26) to 1.24 (1.14–1.34) at 50 mmHg.
 Liu 2026 preprint: MOVER, 3,075 patients; exposure arterial MAP<65 with cuff ≥75 in ≥10% of pairs (691 exposed); creatinine doubling aOR 1.61 (1.16–2.23), 1.32 (0.90–1.95) after adjusting for fraction of arterial MAP<65.

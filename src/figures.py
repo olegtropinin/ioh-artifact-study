@@ -130,34 +130,64 @@ def fig_o6():
     save(fig, 'fig4_episode_probability')
 
 
+def fig_flow():
+    """Figure S1: flow of patients."""
+    fl = pd.read_csv(os.path.join(ROOT, 'out', 'results_real', 'flow.csv'))
+    steps = [('Cases with an arterial waveform track', 3645), ('Waveform retrievable', 3434)] + \
+        list(zip(fl.step, fl.n))
+    fig, ax = plt.subplots(figsize=(5.6, 6.2))
+    ax.axis('off')
+    y = 1.0
+    for k, (name, n) in enumerate(steps):
+        ax.text(0.5, y, f'{name}\nn = {n:,}', ha='center', va='center', fontsize=8,
+                bbox=dict(boxstyle='round,pad=0.4', fc='white', ec=INK2, lw=0.8))
+        if k < len(steps) - 1:
+            ax.annotate('', xy=(0.5, y - 0.075), xytext=(0.5, y - 0.035),
+                        arrowprops=dict(arrowstyle='->', color=INK2, lw=0.8))
+        y -= 0.105
+    ax.text(0.5, y + 0.035, 'AKI analysis set', ha='center', va='center', fontsize=7, color=INK2)
+    ax.text(0.0, y - 0.02, 'Descriptive cohort: the 3,370 cases after the 30-min step, first case per patient\n'
+            '= 3,249 patients (transplantation included).', ha='left', va='center', fontsize=7, color=INK2)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(y - 0.06, 1.06)
+    save(fig, 'figS1_flow')
+
+
 def fig_nibp(c):
-    """Figure 5: artefact fraction around non-invasive cuff readings."""
+    """Figure 2: artefact fraction around non-invasive cuff readings, by artefact type."""
     desc = pd.read_pickle(os.path.join(CACHE, 'desc.pkl')).set_index('caseid')
-    off = np.arange(-60, 16)            # windows (2 s) relative to NIBP value appearing
-    num = np.zeros(len(off)); den = np.zeros(len(off))
+    off = np.arange(-150, 16)           # windows (2 s) relative to the NIBP value appearing
+    groups = {'Non-pulsatile': [4], 'High (flush)': [3], 'Zero or noise': [2, 5]}
+    num = {k: np.zeros(len(off)) for k in groups}
+    den = np.zeros(len(off))
     for cid in c.index:
         d = dict(np.load(os.path.join(ROOT, 'data', 'cases', f'{cid}.npz')))
         lb = classify(d)
-        lag = best_lag(d, lb)
-        nb = shift(d['n_NIBP_MBP'], lag)
+        nb = d['n_NIBP_MBP']           # cuff values are not lag-shifted
         p0, p1 = int(desc.loc[cid, 'p0']), int(desc.loc[cid, 'p1'])
         prev = np.concatenate([[np.nan], nb[:-1]])
         ev = np.flatnonzero(np.isfinite(nb) & ~(prev == nb))
-        ev = ev[(ev >= p0 + 60) & (ev < p1 - 16)]
-        art = np.isin(lb, ARTEFACT).astype(float)
+        ev = ev[(ev >= p0 + 150) & (ev < p1 - 16)]
         for j in ev:
-            num += art[j + off]
+            for k, labs in groups.items():
+                num[k] += np.isin(lb[j + off], labs)
             den += 1
-    fig, ax = plt.subplots(figsize=(5.6, 2.4))
-    ax.plot(off * 2, 100 * num / den, color=BLUE, lw=2)
+    fig, ax = plt.subplots(figsize=(5.6, 2.6))
+    for (k, v), col in zip(num.items(), [BLUE, ORANGE, AQUA]):
+        ax.plot(off * 2, 100 * v / den, color=col, lw=1.8, label=k)
+    tot = sum(num.values()) / den
+    ax.plot(off * 2, 100 * tot, color=INK, lw=1, ls='--', label='All artefact')
     ax.axvline(0, color=INK2, lw=0.8, ls=':')
     ax.set_xlabel('Seconds relative to the moment a new cuff (NIBP) value appears')
-    ax.set_ylabel('% of arterial windows\nlabelled artefact')
-    ax.text(1, ax.get_ylim()[1] * 0.9, f'{int(den[0])} cuff readings', color=INK2, fontsize=7)
+    ax.set_ylabel('% of arterial windows')
+    ax.legend(frameon=False, fontsize=7, loc='upper left')
+    ax.text(5, ax.get_ylim()[1] * 0.9, f'{int(den[0])} cuff readings', color=INK2, fontsize=7)
     fig.tight_layout()
     save(fig, 'fig5_nibp_cuff')
-    return dict(events=int(den[0]), peak_pct=float(100 * (num / den).max()),
-                peak_offset_s=int(off[np.argmax(num / den)] * 2), baseline_pct=float(100 * (num / den)[:10].mean()))
+    return dict(events=int(den[0]), peak_pct=float(100 * tot.max()), peak_offset_s=int(off[np.argmax(tot)] * 2),
+                baseline_pct_300_240=float(100 * tot[:30].mean()),
+                peak_by_type={k: float(100 * (v / den)[np.argmax(tot)]) for k, v in num.items()},
+                baseline_by_type={k: float(100 * (v / den)[:30].mean()) for k, v in num.items()})
 
 
 def fig_spec_curve(mode):
@@ -255,7 +285,9 @@ def fig_forest(mode):
 
 if __name__ == '__main__':
     what = sys.argv[1] if len(sys.argv) > 1 else 'descriptive'
-    if what == 'descriptive':
+    if what == 'flow':
+        fig_flow()
+    elif what == 'descriptive':
         c = descriptive_cohort()
         fig_o2()
         fig_o6()

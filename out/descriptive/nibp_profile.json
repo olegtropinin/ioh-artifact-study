@@ -1,1 +1,1 @@
-{"events": 15643, "peak_pct": 24.937671802084, "peak_offset_s": -16, "baseline_pct": 4.584798312344178}
+{"events": 14307, "peak_pct": 25.812539316418537, "peak_offset_s": -22, "baseline_pct_300_240": 4.348454136669695, "peak_by_type": {"Non-pulsatile": 22.422590340392816, "High (flush)": 2.348500733906479, "Zero or noise": 1.0414482421192424}, "baseline_by_type": {"Non-pulsatile": 1.6914796952540716, "High (flush)": 1.7494932550499755, "Zero or noise": 0.9074811863656487}}

@@ -1,39 +1,42 @@
 # Introduction
 
-Intraoperative hypotension is associated with acute kidney injury, myocardial injury and
-death, and thresholds derived from such studies — typically a mean arterial pressure (MAP)
-below 65 mmHg for more than a few minutes — now appear in consensus statements and drive
-quality metrics, trials and automated decision support.[@walsh; @salmasi; @poqi] Almost all of this evidence
-comes from retrospective analyses of numbers stored by anaesthesia information management
-systems: one value per minute or less, taken from the monitor rather than from the
-waveform the clinician sees.
+Intraoperative hypotension is associated with acute kidney injury (AKI), myocardial injury and
+death.[@walsh; @salmasi; @sun; @wesselink] Thresholds derived from these studies, typically a
+mean arterial pressure (MAP) below 65 mmHg for more than a few minutes, now appear in consensus
+statements and quality metrics.[@poqi] Almost all of this evidence comes from retrospective
+analyses of numbers stored by anaesthesia information management systems. These are one value
+per minute or less, taken from the monitor rather than from the waveform the clinician sees.
 
-Invasive arterial pressure is the reference standard of these studies, but the stored
-numbers inherit every event that disturbs an arterial line: flushing, blood sampling,
-transducer zeroing, a closed stopcock, a kinked catheter, and cuff inflation on the same
-limb.[@kool; @pasma2021] Earlier work established three things. Choosing among published artefact
-filters changes the measured incidence of hypotension up to twofold, yet changed the
-association with myocardial injury little.[@pasma2020] Coarser sampling inflates the measured
-burden of hypotension against a waveform reference, although its effect on outcome
-associations has only been extrapolated.[@jacobsson] And how hypotension is modelled changes the
-estimated odds ratios.[@vernooij] Recent studies of the open VitalDB dataset relating
-intraoperative arterial pressure to kidney injury applied a single cleaning rule or did
-not describe one, and none examined its influence.[@leesb; @ensarioglu; @folks]
+Invasive arterial pressure is the reference standard of these studies. Yet the stored numbers
+inherit every event that disturbs an arterial line:
+- flushing;
+- blood sampling through a stopcock;
+- zeroing;
+- a kinked or damped catheter;
+- cuff inflation on the same limb.[@kool; @pasma2021; @gardner; @saugel]
 
-Three questions therefore remain open. First, when artefacts are identified from the
-waveform itself rather than from rules applied to the numbers, how much of recorded
-hypotension is artefact? Second, does the combination of artefact rule and data resolution
-change the estimated association between hypotension and acute kidney injury when that
-association is estimated directly, rather than extrapolated? Third — and not, to our
-knowledge, previously examined — is artefact misclassification *differential*? Arterial
-blood is sampled more often in sicker and less stable patients; if sampling artefacts are
-recorded as hypotension preferentially in patients who later develop kidney injury, the
-error would bias published associations away from, not towards, the null.
+Earlier work established three things:
+- choosing among published artefact filters changes the measured incidence of hypotension up
+  to twofold, but changed the association with myocardial injury little;[@pasma2020]
+- coarser sampling inflates the measured burden of hypotension against a waveform reference,
+  although its effect on outcome associations has only been extrapolated;[@jacobsson]
+- how hypotension is modelled changes the estimated odds ratios.[@vernooij]
 
-A fourth question matters at the bedside and for automated systems: which recorded
-low-pressure episodes are artefact, and can they be recognised from the numbers alone?
+Recent studies of the open VitalDB dataset relating arterial pressure to kidney injury applied
+a single cleaning rule or did not describe one.[@leesb; @ensarioglu; @folks]
 
-We used the two parallel recordings in VitalDB — the 500 Hz waveform and the monitor's 2-s
-numerics — to build a waveform-referenced MAP series, and compared it with 420 pipelines
-that a retrospective study could plausibly use, in a pre-specified multiverse
-(specification-curve) analysis.[@steegen; @simonsohn]
+Four questions remain open:
+1. When artefacts are identified from the waveform rather than from rules applied to the
+   numbers, how much of recorded hypotension is artefact?
+2. Do the artefact rule and the data resolution change the estimated association between
+   hypotension and AKI when that association is estimated directly?
+3. Is artefact misclassification *differential*? Arterial blood is sampled more often in
+   sicker patients. If sampling artefact were recorded as hypotension preferentially in
+   patients who later develop AKI, the error would bias published associations away from the
+   null rather than towards it.
+4. Which recorded low-pressure episodes are artefact, and how quickly can this be recognised?
+
+We used the two parallel recordings in VitalDB, the 500 Hz waveform and the monitor's 2-s
+numbers, to build a waveform-referenced MAP series. We compared it with 420 pipelines that a
+retrospective study could plausibly use, in a pre-specified multiverse
+analysis.[@steegen; @simonsohn]

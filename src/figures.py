@@ -1,4 +1,4 @@
-"""Figures for the manuscript. Usage: python src/figures.py [descriptive|outcome]"""
+"""Figures for the manuscript. Usage: [FIG_LANG=ru] python src/figures.py [descriptive|flow|real]"""
 import json
 import os
 import sys
@@ -26,7 +26,81 @@ plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 8, 'axes.edgecol
                      'savefig.dpi': 300, 'savefig.bbox': 'tight'})
 
 
+LANG = os.environ.get('FIG_LANG', 'en')    # 'ru' writes <name>_ru.png/pdf for the Russian translation
+RU = {
+    'Transducer open to air / zeroing': 'Датчик открыт в атмосферу / установка нуля',
+    'Closed stopcock (blood sampling)': 'Перекрытый кран (забор крови)',
+    'Fast flush, then recovery': 'Быстрое промывание, затем восстановление',
+    'Non-pulsatile trace, cuff reading within 3 min': 'Непульсирующая кривая, измерение манжетой в пределах 3 мин',
+    'Arterial waveform (500 Hz)': 'Кривая артериального давления (500 Гц)',
+    'Monitor MAP (2 s, lag-aligned)': 'САД монитора (2 с, выровнено по задержке)',
+    'mmHg': 'мм рт. ст.',
+    'Seconds from start of recorded MAP < 65 mmHg': 'Секунды от начала зарегистрированного САД < 65 мм рт. ст.',
+    'Shaded: windows labelled artefact or guard. Dashed line: 65 mmHg.':
+        'Заливка: окна с меткой артефакта или охранного окна. Пунктир: 65 мм рт. ст.',
+    'R1: every 2 s': 'R1: каждые 2 с', 'R2: 1 value per min': 'R2: 1 значение в минуту',
+    'R3: 1-min median': 'R3: поминутная медиана',
+    'Spurious (reference ≥ 65)': 'Ложные (эталон ≥ 65)',
+    'Indeterminate (no reference)': 'Неопределённые (нет эталона)',
+    '% of recorded minutes with MAP < 65': '% зарегистрированных минут с САД < 65',
+    '<=10 s': '≤ 10 с', '11-30 s': '11–30 с', '31-60 s': '31–60 с', '1-2 min': '1–2 мин',
+    '2-5 min': '2–5 мин', '>5 min': '> 5 мин',
+    'Episode duration': 'Длительность эпизода', 'Episode nadir': 'Надир эпизода',
+    'P(waveform-flagged)': 'P(помечен по кривой)',
+    'Cases with an arterial waveform track': 'Случаи с записью кривой артериального давления',
+    'Waveform retrievable': 'Кривая загружается',
+    'ART waveform, monitoring period found': 'Кривая ART, период мониторинга найден',
+    'age >= 18': 'возраст ≥ 18 лет', 'general anaesthesia': 'общая анестезия',
+    '>= 30 min reference-valid monitoring': '≥ 30 мин мониторинга, валидного по эталону',
+    'not transplantation': 'не трансплантация', 'baseline creatinine available': 'есть исходный креатинин',
+    'baseline eGFR >= 15': 'исходная рСКФ ≥ 15', 'creatinine within 7 days after surgery':
+        'креатинин в течение 7 суток после операции',
+    'first eligible case per patient': 'первый подходящий случай пациента',
+    'AKI analysis set': 'Набор для анализа ОПП',
+    'Descriptive cohort: the 3,370 cases after the 30-min step, first case per patient\n'
+    '= 3,249 patients (transplantation included).':
+        'Описательная когорта: 3 370 случаев после шага «30 мин», первый случай пациента\n'
+        '= 3 249 пациентов (с трансплантациями).',
+    'Non-pulsatile': 'Непульсирующие', 'High (flush)': 'Высокие (промывание)', 'Zero or noise': 'Ноль или шум',
+    'All artefact': 'Все артефакты',
+    'Seconds relative to the moment a new cuff (NIBP) value appears':
+        'Секунды относительно появления нового значения манжеты (НИАД)',
+    '% of arterial windows': '% окон артериальной кривой', '{} cuff readings': '{} измерений манжетой',
+    'Ratio of odds ratios\n(pipeline / matched reference)':
+        'Отношение отношений шансов\n(конвейер / эталон)',
+    'Exposure metric': 'Метрика экспозиции',
+    'binary': '≥ 10 мин', 'minutes': 'минуты', 'auc': 'площадь', 'twa': 'средневзвешенное',
+    'MAP<{}': 'САД<{}',
+    '{} pipeline specifications, sorted by ratio of odds ratios':
+        '{} спецификаций конвейеров, по возрастанию отношения отношений шансов',
+    '≥10 min': '≥ 10 мин', 'Minutes': 'Минуты', 'AUC': 'Площ.', 'TWA': 'Ср.-вз.',
+    'F0 none': 'F0 нет', 'F1 MAP 20–250': 'F1 САД 20–250', 'F2 MAP 30–200': 'F2 САД 30–200',
+    'F3 Jacobsson': 'F3 Jacobsson', 'F4 consistency': 'F4 согласованность', 'F5 + neighbour': 'F5 + соседние',
+    'F6 + 7-pt median': 'F6 + медиана 7 точек',
+    'Ratio of odds ratios for AKI, pipeline / reference (1-min median resolution)':
+        'Отношение отношений шансов ОПП, конвейер / эталон (разрешение «поминутная медиана»)',
+    'Orange: ROR < 1; blue: ROR > 1 (colour scale 1/3 to 3, log). '
+    'AUC, area under the threshold; TWA, time-weighted average below the threshold.':
+        'Оранжевый: ROR < 1; синий: ROR > 1 (шкала от 1/3 до 3, логарифмическая). '
+        'Площ. — площадь под порогом; ср.-вз. — средневзвешенное по времени ниже порога.',
+    '2-s': '2 с', '1/min': '1 в минуту', '1-min median': 'поминутная медиана',
+    '5-min chart': 'карта, 5 мин', '15-min chart': 'карта, 15 мин',
+    'Ratio of odds ratios for AKI (pipeline / reference at the same resolution)':
+        'Отношение отношений шансов ОПП (конвейер / эталон при том же разрешении)',
+    'Thin line: 95% CI; wide band: simultaneous 95% band over 35 cells; '
+    'grey: equivalence margin 0.80–1.25.':
+        'Тонкая линия: 95% ДИ; широкая полоса: одновременная 95% полоса по 35 ячейкам; '
+        'серое: граница эквивалентности 0,80–1,25.',
+}
+
+
+def T(text):
+    """Figure text in the requested language (English unless FIG_LANG=ru)."""
+    return RU[text] if LANG == 'ru' else text
+
+
 def save(fig, name):
+    name += '_ru' if LANG == 'ru' else ''
     os.makedirs(FIG, exist_ok=True)
     fig.savefig(os.path.join(FIG, name + '.png'))
     fig.savefig(os.path.join(FIG, name + '.pdf'))
@@ -60,19 +134,19 @@ def fig_examples(c):
         i0 = p0 + int(r.start)
         a, b = i0 - 20, i0 + int(r.dur_s // 2) + 25
         t = np.arange(a * 1000, b * 1000) / 500 - i0 * 2
-        ax.plot(t, w[a * 1000:b * 1000], color=INK2, lw=0.5, label='Arterial waveform (500 Hz)')
+        ax.plot(t, w[a * 1000:b * 1000], color=INK2, lw=0.5, label=T('Arterial waveform (500 Hz)'))
         tm = np.arange(a, b) * 2 - i0 * 2
-        ax.step(tm, m[a:b], where='post', color=ORANGE, lw=1.6, label='Monitor MAP (2 s, lag-aligned)')
+        ax.step(tm, m[a:b], where='post', color=ORANGE, lw=1.6, label=T('Monitor MAP (2 s, lag-aligned)'))
         ax.axhline(65, color=BLUE, lw=1, ls='--')
         art = np.isin(lb[a:b], ARTEFACT) | (lb[a:b] == 6)
         for k in np.flatnonzero(art):
             ax.axvspan(tm[k], tm[k] + 2, color=YELLOW, alpha=0.25, lw=0)
         ax.set_ylim(-20, 320 if lab == 3 else 200)
-        ax.set_title(title, loc='left', fontsize=8.5, color=INK)
-        ax.set_ylabel('mmHg')
-    axs[-1].set_xlabel('Seconds from start of recorded MAP < 65 mmHg')
+        ax.set_title(T(title), loc='left', fontsize=8.5, color=INK)
+        ax.set_ylabel(T('mmHg'))
+    axs[-1].set_xlabel(T('Seconds from start of recorded MAP < 65 mmHg'))
     axs[0].legend(loc='upper right', frameon=False, fontsize=7)
-    fig.text(0.01, 0.005, 'Shaded: windows labelled artefact or guard. Dashed line: 65 mmHg.', color=INK2, fontsize=7)
+    fig.text(0.01, 0.005, T('Shaded: windows labelled artefact or guard. Dashed line: 65 mmHg.'), color=INK2, fontsize=7)
     fig.tight_layout()
     save(fig, 'fig1_examples')
 
@@ -85,14 +159,14 @@ def fig_o2():
     for ax, res in zip(axs, ['R1', 'R2', 'R3']):
         g = t[t.res == res].set_index('filter').loc[['F0', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6']]
         x = np.arange(len(g))
-        ax.bar(x - 0.2, 100 * g.spurious_frac, 0.38, color=ORANGE, label='Spurious (reference ≥ 65)')
+        ax.bar(x - 0.2, 100 * g.spurious_frac, 0.38, color=ORANGE, label=T('Spurious (reference ≥ 65)'))
         ax.errorbar(x - 0.2, 100 * g.spurious_frac, yerr=[100 * (g.spurious_frac - g.lo), 100 * (g.hi - g.spurious_frac)],
                     fmt='none', ecolor=INK, lw=0.7, capsize=1.5)
-        ax.bar(x + 0.2, 100 * g.indeterminate_frac, 0.38, color=SEQ[1], label='Indeterminate (no reference)')
+        ax.bar(x + 0.2, 100 * g.indeterminate_frac, 0.38, color=SEQ[1], label=T('Indeterminate (no reference)'))
         ax.set_xticks(x, g.index)
-        ax.set_title(names[res], fontsize=8.5, loc='left')
+        ax.set_title(T(names[res]), fontsize=8.5, loc='left')
         ax.grid(axis='x', visible=False)
-    axs[0].set_ylabel('% of recorded minutes with MAP < 65')
+    axs[0].set_ylabel(T('% of recorded minutes with MAP < 65'))
     axs[0].legend(frameon=False, fontsize=7, loc='upper left')
     fig.tight_layout()
     save(fig, 'fig2_spurious')
@@ -120,12 +194,12 @@ def fig_o6():
                         fontsize=6.5, color='white' if P[i, j] > 0.55 else INK)
             elif N[i, j] > 0:
                 ax.text(j, i, f'n={int(N[i, j])}', ha='center', va='center', fontsize=6, color=INK2)
-    ax.set_xticks(range(len(durs)), durs)
-    ax.set_yticks(range(len(nads)), [f'{n} mmHg' for n in nads])
-    ax.set_xlabel('Episode duration'); ax.set_ylabel('Episode nadir')
+    ax.set_xticks(range(len(durs)), [T(d) for d in durs])
+    ax.set_yticks(range(len(nads)), [f"{n.replace('-', '–') if LANG == 'ru' else n} {T('mmHg')}" for n in nads])
+    ax.set_xlabel(T('Episode duration')); ax.set_ylabel(T('Episode nadir'))
     ax.grid(False)
     cb = fig.colorbar(im, ax=ax, fraction=0.04)
-    cb.set_label('P(waveform-flagged)')
+    cb.set_label(T('P(waveform-flagged)'))
     fig.tight_layout()
     save(fig, 'fig4_episode_probability')
 
@@ -139,15 +213,15 @@ def fig_flow():
     ax.axis('off')
     y = 1.0
     for k, (name, n) in enumerate(steps):
-        ax.text(0.5, y, f'{name}\nn = {n:,}', ha='center', va='center', fontsize=8,
+        ax.text(0.5, y, f"{T(name)}\nn = {n:,}" if LANG == 'en' else f"{T(name)}\nn = {n:,}".replace(f'{n:,}', f'{n:,}'.replace(',', ' ')), ha='center', va='center', fontsize=8,
                 bbox=dict(boxstyle='round,pad=0.4', fc='white', ec=INK2, lw=0.8))
         if k < len(steps) - 1:
             ax.annotate('', xy=(0.5, y - 0.075), xytext=(0.5, y - 0.035),
                         arrowprops=dict(arrowstyle='->', color=INK2, lw=0.8))
         y -= 0.105
-    ax.text(0.5, y + 0.035, 'AKI analysis set', ha='center', va='center', fontsize=7, color=INK2)
-    ax.text(0.0, y - 0.02, 'Descriptive cohort: the 3,370 cases after the 30-min step, first case per patient\n'
-            '= 3,249 patients (transplantation included).', ha='left', va='center', fontsize=7, color=INK2)
+    ax.text(0.5, y + 0.035, T('AKI analysis set'), ha='center', va='center', fontsize=7, color=INK2)
+    ax.text(0.0, y - 0.02, T('Descriptive cohort: the 3,370 cases after the 30-min step, first case per patient\n'
+                             '= 3,249 patients (transplantation included).'), ha='left', va='center', fontsize=7, color=INK2)
     ax.set_xlim(0, 1)
     ax.set_ylim(y - 0.06, 1.06)
     save(fig, 'figS1_flow')
@@ -174,14 +248,14 @@ def fig_nibp(c):
             den += 1
     fig, ax = plt.subplots(figsize=(5.6, 2.6))
     for (k, v), col in zip(num.items(), [BLUE, ORANGE, AQUA]):
-        ax.plot(off * 2, 100 * v / den, color=col, lw=1.8, label=k)
+        ax.plot(off * 2, 100 * v / den, color=col, lw=1.8, label=T(k))
     tot = sum(num.values()) / den
-    ax.plot(off * 2, 100 * tot, color=INK, lw=1, ls='--', label='All artefact')
+    ax.plot(off * 2, 100 * tot, color=INK, lw=1, ls='--', label=T('All artefact'))
     ax.axvline(0, color=INK2, lw=0.8, ls=':')
-    ax.set_xlabel('Seconds relative to the moment a new cuff (NIBP) value appears')
-    ax.set_ylabel('% of arterial windows')
+    ax.set_xlabel(T('Seconds relative to the moment a new cuff (NIBP) value appears'))
+    ax.set_ylabel(T('% of arterial windows'))
     ax.legend(frameon=False, fontsize=7, loc='upper left')
-    ax.text(5, ax.get_ylim()[1] * 0.9, f'{int(den[0])} cuff readings', color=INK2, fontsize=7)
+    ax.text(5, ax.get_ylim()[1] * 0.9, T('{} cuff readings').format(int(den[0])), color=INK2, fontsize=7)
     fig.tight_layout()
     save(fig, 'fig5_nibp_cuff')
     return dict(events=int(den[0]), peak_pct=float(100 * tot.max()), peak_offset_s=int(off[np.argmax(tot)] * 2),
@@ -200,14 +274,14 @@ def fig_spec_curve(mode):
     ax = fig.add_subplot(gs[0])
     col = {'binary': BLUE, 'minutes': ORANGE, 'auc': AQUA, 'twa': YELLOW}
     for m, g in p.groupby('metric'):
-        ax.scatter(g.index, g.ror, s=7, color=col[m], label=m, lw=0)
+        ax.scatter(g.index, g.ror, s=7, color=col[m], label=T(m), lw=0)
     ax.axhline(1, color=INK2, lw=0.8)
     ax.axhspan(0.8, 1.25, color=GRID, alpha=0.6, lw=0)
     ax.set_yscale('log')
     ax.set_yticks([0.33, 0.5, 1, 2, 3], ['0.33', '0.5', '1', '2', '3'])
     ax.minorticks_off()
-    ax.set_ylabel('Ratio of odds ratios\n(pipeline / matched reference)')
-    ax.legend(frameon=False, ncol=4, fontsize=7, loc='upper left', title='Exposure metric', title_fontsize=7)
+    ax.set_ylabel(T('Ratio of odds ratios\n(pipeline / matched reference)'))
+    ax.legend(frameon=False, ncol=4, fontsize=7, loc='upper left', title=T('Exposure metric'), title_fontsize=7)
     ax.set_xticks([])
     ax2 = fig.add_subplot(gs[1], sharex=ax)
     rows = [('filter', f) for f in ['F0', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6']] + \
@@ -215,9 +289,9 @@ def fig_spec_curve(mode):
     for k, (fld, val) in enumerate(rows):
         idx = p.index[p[fld] == val]
         ax2.scatter(idx, np.full(len(idx), k), s=2, color=INK, marker='|', lw=0.6)
-    ax2.set_yticks(range(len(rows)), [f'{v}' if fld != 'thr' else f'MAP<{v}' for fld, v in rows])
+    ax2.set_yticks(range(len(rows)), [f'{v}' if fld != 'thr' else T('MAP<{}').format(v) for fld, v in rows])
     ax2.invert_yaxis()
-    ax2.set_xlabel(f'{len(p)} pipeline specifications, sorted by ratio of odds ratios')
+    ax2.set_xlabel(T('{} pipeline specifications, sorted by ratio of odds ratios').format(len(p)))
     ax2.grid(False)
     save(fig, 'fig3_spec_curve')
 
@@ -241,16 +315,16 @@ def fig_depth_heatmap(mode):
             v = M[i, j]
             ax.text(j, i, f'{v:.2f}', ha='center', va='center', fontsize=7,
                     color='white' if abs(np.log(v)) > 0.7 else INK)
-    ax.set_xticks(range(len(cols)), [f'{lab[m]}\n<{t}' for m, t in cols], fontsize=7)
-    ax.set_yticks(range(len(filt)), ['F0 none', 'F1 MAP 20–250', 'F2 MAP 30–200', 'F3 Jacobsson',
-                                     'F4 consistency', 'F5 + neighbour', 'F6 + 7-pt median'], fontsize=7)
+    ax.set_xticks(range(len(cols)), [f'{T(lab[m])}\n<{t}' for m, t in cols], fontsize=7)
+    ax.set_yticks(range(len(filt)), [T(f) for f in ('F0 none', 'F1 MAP 20–250', 'F2 MAP 30–200', 'F3 Jacobsson',
+                                                 'F4 consistency', 'F5 + neighbour', 'F6 + 7-pt median')], fontsize=7)
     for x in (2.5, 5.5, 8.5):
         ax.axvline(x, color='white', lw=2)
     ax.grid(False)
     ax.tick_params(length=0)
-    ax.set_title('Ratio of odds ratios for AKI, pipeline / reference (1-min median resolution)', fontsize=8)
-    fig.text(0.01, 0.01, 'Orange: ROR < 1; blue: ROR > 1 (colour scale 1/3 to 3, log). '
-             'AUC, area under the threshold; TWA, time-weighted average below the threshold.',
+    ax.set_title(T('Ratio of odds ratios for AKI, pipeline / reference (1-min median resolution)'), fontsize=8)
+    fig.text(0.01, 0.01, T('Orange: ROR < 1; blue: ROR > 1 (colour scale 1/3 to 3, log). '
+                           'AUC, area under the threshold; TWA, time-weighted average below the threshold.'),
              fontsize=6.5, color=INK2)
     fig.subplots_adjust(bottom=0.2, left=0.17, right=0.99)
     save(fig, 'fig3_depth_heatmap')
@@ -273,13 +347,13 @@ def fig_forest(mode):
         ax.set_xlim(0.4, 2.5)
         ax.set_xticks([0.5, 1, 2], ['0.5', '1', '2'])
         ax.minorticks_off()
-        ax.set_title(rname[r], fontsize=8)
+        ax.set_title(T(rname[r]), fontsize=8)
         ax.grid(axis='y', visible=False)
     axes[0].set_yticks(np.arange(7)[::-1], ['F0', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6'])
     fig.subplots_adjust(bottom=0.22, wspace=0.12)
-    fig.supxlabel('Ratio of odds ratios for AKI (pipeline / reference at the same resolution)', fontsize=8, y=0.08)
-    fig.text(0.01, 0.01, 'Thin line: 95% CI; wide band: simultaneous 95% band over 35 cells; '
-             'grey: equivalence margin 0.80–1.25.', fontsize=6.5, color=INK2)
+    fig.supxlabel(T('Ratio of odds ratios for AKI (pipeline / reference at the same resolution)'), fontsize=8, y=0.08)
+    fig.text(0.01, 0.01, T('Thin line: 95% CI; wide band: simultaneous 95% band over 35 cells; '
+                           'grey: equivalence margin 0.80–1.25.'), fontsize=6.5, color=INK2)
     save(fig, 'fig6_forest')
 
 
@@ -292,7 +366,8 @@ if __name__ == '__main__':
         fig_o2()
         fig_o6()
         info = fig_nibp(c)
-        json.dump(info, open(os.path.join(ROOT, 'out', 'descriptive', 'nibp_profile.json'), 'w'))
+        if LANG == 'en':
+            json.dump(info, open(os.path.join(ROOT, 'out', 'descriptive', 'nibp_profile.json'), 'w'))
         print(info)
         fig_examples(c)
     else:

@@ -41,7 +41,14 @@ shasum -a 256 -c data_checksums.sha256
 .venv/bin/python src/posthoc_models.py real
 .venv/bin/python src/posthoc_stats.py
 .venv/bin/python src/validate_v1_sweep.py
+# Russian translation: figures with Russian labels (*_ru.png), then the Russian manuscript and supplement
+FIG_LANG=ru .venv/bin/python src/figures.py flow && FIG_LANG=ru .venv/bin/python src/figures.py descriptive
+FIG_LANG=ru .venv/bin/python src/figures.py real && .venv/bin/python paper/build.py ru
 ```
+
+The Russian text (`paper/*_ru.md`, `docs/protocol_ru.md`) is a translation; the English files
+are the version of record. `paper/supplement_tables_ru.md` is translated by hand from the
+English tables, so it must be updated by hand if `src/tables.py` output changes.
 
 Thresholds of the window classifier (guard, noise, pulsatility) were set by inspection of
 descriptive, outcome-free data during development (fewer than 600 cases, before the full

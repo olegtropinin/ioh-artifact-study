@@ -94,15 +94,19 @@ def main():
     caps = CAPTIONS[LANG]
     figs = ['fig1_examples', 'fig5_nibp_cuff', 'fig2_spurious', 'fig6_forest']
     text += '\n# ' + ('Figures' if LANG == 'en' else 'Рисунки') + '\n\n'
-    text += '\n\n'.join(f'![{c}](figures/{f}.png){{width=100%}}' for f, c in zip(figs, caps)) + '\n'
+    text += '\n\n'.join(f'![{c}](figures/{f}{sfx}.png){{width=100%}}' for f, c in zip(figs, caps)) + '\n'
     # supplement: methods, tables, figures, protocol (citations numbered with the main list)
-    sup = read(f'supp_methods{sfx}.md') + '\n' + read(f'supplement_tables{sfx}.md')
+    # captions already carry "Figure S<n>", so the LaTeX "Figure <n>:" label is suppressed,
+    # and the wide supplementary tables are set in a smaller font
+    sup = ('---\nheader-includes: |\n  \\usepackage{caption}\n  \\captionsetup[figure]{labelformat=empty}\n'
+           '  \\usepackage{etoolbox}\n  \\AtBeginEnvironment{longtable}{\\small\\setlength{\\tabcolsep}{3pt}}\n---\n\n'
+           + read(f'supp_methods{sfx}.md') + '\n' + read(f'supplement_tables{sfx}.md'))
     sup += '\n# ' + ('Supplementary figures' if LANG == 'en' else 'Дополнительные рисунки') + '\n\n'
     for f, cap in zip(['figS1_flow', 'fig3_spec_curve', 'fig4_episode_probability', 'fig3_depth_heatmap'],
                       SUPCAPS[LANG]):
-        sup += f'![{cap}](figures/{f}.png){{width=90%}}\n\n'
-    proto = open(os.path.join(HERE, '..', 'docs', 'protocol.md')).read()
-    sup += '\n# ' + ('Supplementary Protocol' if LANG == 'en' else 'Протокол (на английском)') + '\n\n' + \
+        sup += f'![{cap}](figures/{f}{sfx}.png){{width=90%}}\n\n'
+    proto = open(os.path.join(HERE, '..', 'docs', f'protocol{sfx}.md')).read()
+    sup += '\n# ' + ('Supplementary Protocol' if LANG == 'en' else 'Дополнительный протокол') + '\n\n' + \
         re.sub(r'(?m)^#', '##', proto)
     sup = sup.replace('→', '->').replace('∈', ' in ')
     with open(os.path.join(HERE, f'supplement{sfx}.md'), 'w') as fh:

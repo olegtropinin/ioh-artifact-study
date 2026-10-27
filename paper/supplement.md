@@ -1,3 +1,11 @@
+---
+header-includes: |
+  \usepackage{caption}
+  \captionsetup[figure]{labelformat=empty}
+  \usepackage{etoolbox}
+  \AtBeginEnvironment{longtable}{\small\setlength{\tabcolsep}{3pt}}
+---
+
 # Supplementary Methods
 
 ## S1. Waveform features and classifier

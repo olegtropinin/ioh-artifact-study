@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this code or these results, please cite the article and this repository."
+title: "Arterial-line artefacts and the hypotension-acute kidney injury association in VitalDB: a waveform-referenced cohort study (code and results)"
+authors:
+  - family-names: Tropynin
+    given-names: Oleg
+    affiliation: "Independent researcher, Karaganda, Kazakhstan"
+    email: tropininoleg@gmail.com
+    orcid: "https://orcid.org/0009-0006-5431-4285"
+license: MIT
+repository-code: "https://github.com/olegtropinin/ioh-artifact-study"
+date-released: 2026-10-28
+keywords: [intraoperative hypotension, arterial pressure monitoring, artefacts, acute kidney injury, measurement error, VitalDB, multiverse analysis]

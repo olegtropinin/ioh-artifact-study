@@ -18,7 +18,7 @@ whole analysis had run end to end on a randomly permuted outcome. The Supplement
 lists every amendment before the freeze, and every change and post hoc analysis after
 unblinding, with dates and reasons. Post hoc analyses are labelled as such throughout.
 
-A large language model (Claude, Anthropic) was used under the author's direction to write the
+A large language model (Claude Opus 5.5, Anthropic) was used under the author's direction to write the
 analysis code, to review the methods adversarially before the freeze, to simulate peer review
 of the draft and to draft the text. It also served, as described below, as a secondary
 blinded rater. The author checked all code, outputs and text.

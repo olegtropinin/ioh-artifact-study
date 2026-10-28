@@ -64,8 +64,9 @@ excess was:
 - mostly not flush.
 
 A smaller excess with pedal and femoral catheters shows that this is not the whole
-explanation. Studies of discordance should exclude arterial values from the cuff cycle, or
-show that their results survive the exclusion.
+explanation, and because VitalDB does not record the cuff arm, occlusion remains a hypothesis.
+Studies of discordance should check whether their results survive excluding arterial values
+from the cuff cycle.
 
 Earlier work compared artefact detection algorithms with human annotation of stored
 values,[@maleczek; @pasma2021] and a scoping review found no agreed reference standard for

@@ -4,8 +4,12 @@ Code for a pre-specified, waveform-referenced multiverse analysis of how arteria
 artefacts and data-processing choices change (a) measured intraoperative hypotension and
 (b) its estimated association with acute kidney injury.
 
-Data: VitalDB open dataset (Lee HC et al., Sci Data 2022). Nothing patient-level is
-redistributed here; every number is recomputed from the public API.
+Data: VitalDB open dataset (Lee HC et al., Sci Data 2022). Raw waveforms and records are not
+redistributed; every number is recomputed from the public API. Some files in `out/` are
+de-identified per-case or per-episode tables derived from VitalDB (CC BY 4.0).
+
+Manuscript: `paper/manuscript.pdf` and `paper/supplement.pdf` (English, version of record);
+`paper/manuscript_ru.pdf` and `paper/supplement_ru.pdf` (Russian translation).
 
 ## Reproduce
 
@@ -67,3 +71,13 @@ extraction); no script reproduces that tuning.
 | `out/adjudication/` | blinded snippets and blank rating form for human raters (the key is kept out of version control) |
 | `docs/reviews/` | round-1 AI peer reviews and responses |
 | `docs/ai_rater_prompt.md` | prompt and blinding conditions of the AI rater |
+
+## Licences and citation
+
+- Code: MIT licence (`LICENSE`).
+- Manuscript text, figures and result tables: CC BY 4.0.
+- VitalDB data: CC BY 4.0, Seoul National University Hospital; cite Lee HC et al., Sci Data
+  2022;9:279.
+
+Cite this repository with `CITATION.cff`. Author: Oleg Tropynin, independent researcher,
+Karaganda, Kazakhstan (ORCID 0009-0006-5431-4285).

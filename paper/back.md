@@ -23,11 +23,12 @@ approval or consent was required.
 
 **Data and code availability.** VitalDB is openly available at https://vitaldb.net. The
 analysis code, the frozen protocol with all amendments, the permuted dry run, aggregate
-results and the 400-snippet adjudication set are available at [REPOSITORY URL]. The
+results and the 400-snippet adjudication set are available at
+https://github.com/olegtropinin/ioh-artifact-study. The
 adjudication key is available from the author on request, to preserve blinding of future
 raters.
 
-**Use of artificial intelligence.** The author used an AI system (Claude, Anthropic) for
+**Use of artificial intelligence.** The author used an AI system (Claude Opus 5.5, Anthropic) for
 substantial parts of this work, under the author's direction:
 - writing the analysis code;
 - an adversarial review of the methods before the protocol was frozen;

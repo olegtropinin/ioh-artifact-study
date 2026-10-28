@@ -828,7 +828,8 @@ approval or consent was required.
 **Data and code availability.** VitalDB is openly available at https://vitaldb.net. The
 analysis code, the frozen protocol with all amendments, the permuted dry run, aggregate
 results and the 400-snippet adjudication set are available at
-https://github.com/olegtropinin/ioh-artifact-study. The
+https://github.com/olegtropinin/ioh-artifact-study (archived at Zenodo,
+https://doi.org/10.5281/zenodo.23726000). The
 adjudication key is available from the author on request, to preserve blinding of future
 raters.
 

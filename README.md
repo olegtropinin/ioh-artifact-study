@@ -79,5 +79,6 @@ extraction); no script reproduces that tuning.
 - VitalDB data: CC BY 4.0, Seoul National University Hospital; cite Lee HC et al., Sci Data
   2022;9:279.
 
+Archived at Zenodo: https://doi.org/10.5281/zenodo.23726000 (all versions).
 Cite this repository with `CITATION.cff`. Author: Oleg Tropynin, independent researcher,
 Karaganda, Kazakhstan (ORCID 0009-0006-5431-4285).

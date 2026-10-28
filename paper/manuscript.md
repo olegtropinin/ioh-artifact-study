@@ -1,4 +1,10 @@
 ---
+header-includes: |
+  \usepackage{caption}
+  \captionsetup[figure]{labelformat=empty}
+---
+
+---
 title: "How much recorded intraoperative hypotension is arterial-line artefact, and does it bias the association with creatinine-defined acute kidney injury? A waveform-referenced cohort study"
 ---
 
@@ -72,42 +78,26 @@ statements and quality metrics [5]. Almost all of this evidence comes from retro
 analyses of numbers stored by anaesthesia information management systems. These are one value
 per minute or less, taken from the monitor rather than from the waveform the clinician sees.
 
-Invasive arterial pressure is the reference standard of these studies. Yet the stored numbers
-inherit every event that disturbs an arterial line:
-
-- flushing;
-- blood sampling through a stopcock;
-- zeroing;
-- a kinked or damped catheter;
-- cuff inflation on the same limb [6–9].
-
-Earlier work established three things:
-
-- choosing among published artefact filters changes the measured incidence of hypotension up
-  to twofold, but changed the association with myocardial injury little [10];
-
-- coarser sampling inflates the measured burden of hypotension against a waveform reference,
-  although its effect on outcome associations has only been extrapolated [11];
-
-- how hypotension is modelled changes the estimated odds ratios [12].
+Invasive arterial pressure is the reference standard of these studies, yet the stored numbers
+inherit every event that disturbs an arterial line: flushing, blood sampling through a
+stopcock, zeroing, a kinked or damped catheter and cuff inflation on the same
+limb [6–9]. Choosing among published artefact filters changes
+the measured incidence of hypotension up to twofold but the association with myocardial injury
+little [10]; coarser sampling inflates the measured burden of hypotension against a
+waveform reference, although its effect on outcome associations has only been
+extrapolated [11]; and how hypotension is modelled changes the estimated odds
+ratios [12].
 
 Recent studies of the open VitalDB dataset relating arterial pressure to kidney injury applied
 a single cleaning rule or did not describe one [13–15].
 
-Four questions remain open:
-
-1. When artefacts are identified from the waveform rather than from rules applied to the
-   numbers, how much of recorded hypotension is artefact?
-
-2. Do the artefact rule and the data resolution change the estimated association between
-   hypotension and AKI when that association is estimated directly?
-
-3. Is artefact misclassification *differential*? Arterial blood is sampled more often in
-   sicker patients. If sampling artefact were recorded as hypotension preferentially in
-   patients who later develop AKI, the error would bias published associations away from the
-   null rather than towards it.
-
-4. Which recorded low-pressure episodes are artefact, and how quickly can this be recognised?
+Four questions remain open. How much of recorded hypotension is artefact when artefacts are
+identified from the waveform? Do the artefact rule and the data resolution change the
+association between hypotension and AKI when it is estimated directly? Is misclassification
+*differential*: arterial blood is sampled more often in sicker patients, and if sampling
+artefact were recorded as hypotension preferentially in patients who later develop AKI, it
+would bias associations away from the null? And which recorded low-pressure episodes are
+artefact, and how quickly can this be recognised?
 
 We used the two parallel recordings in VitalDB, the 500 Hz waveform and the monitor's 2-s
 numbers, to build a waveform-referenced MAP series. We compared it with 420 pipelines that a
@@ -118,130 +108,79 @@ analysis [16,17].
 
 ## Design, data and reporting
 
-We performed a retrospective cohort study of the open VitalDB dataset [18]:
+We performed a retrospective cohort study of the open VitalDB dataset: 6,388 non-cardiac
+surgical cases at Seoul National University Hospital in 2016–2017, with anaesthesia records,
+laboratory results, monitor numerics (GE Solar 8000) and high-resolution waveforms [18].
+Reporting follows STROBE and RECORD [19,20].
 
-- 6,388 non-cardiac surgical cases;
-- Seoul National University Hospital, 2016–2017;
-- anaesthesia records, laboratory results, monitor numerics (GE Solar 8000) and
-  high-resolution waveforms.
+The analysis protocol was written before any exposure–outcome association was computed,
+revised after an adversarial methods review, and frozen by a tagged commit after the whole
+analysis had run end to end on a randomly permuted outcome. The protocol in Online
+Resource 1 lists every amendment before the freeze, and every change and post hoc analysis
+after unblinding, with dates and reasons. Post hoc analyses are labelled as such throughout.
 
-The institutional review board approved data collection. The data are de-identified and
-public, so no further approval was needed. Reporting follows STROBE and
-RECORD [19,20].
-
-The analysis protocol was written before any exposure–outcome association was computed and
-was revised after an adversarial methods review. It was frozen by a tagged commit after the
-whole analysis had run end to end on a randomly permuted outcome. The Supplementary Protocol
-lists every amendment before the freeze, and every change and post hoc analysis after
-unblinding, with dates and reasons. Post hoc analyses are labelled as such throughout.
-
-A large language model (Claude Opus 5.5, Anthropic) was used under the author's direction to write the
-analysis code, to review the methods adversarially before the freeze, to simulate peer review
-of the draft and to draft the text. It also served, as described below, as a secondary
-blinded rater. The author checked all code, outputs and text.
+A large language model (Claude Opus 5.5, Anthropic) was used under the author's direction to
+write the analysis code, review the methods adversarially before the freeze, simulate peer
+review and draft the text, and as a secondary blinded rater. The author checked all code,
+outputs and text.
 
 ## Participants
 
 We included adults under general anaesthesia whose record contained the 500 Hz arterial
-pressure waveform (radial in 95%) and at least 30 min of reference-valid monitoring. Only the
-first eligible case per patient was used.
-
-For the AKI analysis we further excluded:
-
-- transplantation;
-- patients without a baseline creatinine;
-- baseline estimated glomerular filtration rate (eGFR, CKD-EPI 2021 [21]) below
-  15 mL min^−1^ 1.73 m^−2^;
-
-- patients without a creatinine measurement within 7 days after anaesthesia.
+pressure waveform (radial in 95%) and at least 30 min of reference-valid monitoring, using the
+first eligible case per patient. For the AKI analysis we further excluded transplantation and
+patients without a baseline creatinine, with a baseline estimated glomerular filtration rate
+(eGFR, CKD-EPI 2021 [21]) below 15 mL min^−1^ 1.73 m^−2^, or without a creatinine
+measurement within 7 days after anaesthesia.
 
 ## Waveform classification and the reference series
 
-The monitor stores systolic, diastolic and mean arterial pressure every 2 s. This is the
-stream that anaesthesia information management systems store and that retrospective studies
-analyse. We used the waveform only to decide *whether* each 2-s monitor value was
-trustworthy, never to replace it, so calibration differences between monitor and waveform
-could not enter the comparison.
+The monitor stores arterial pressures every 2 s; this is the stream that anaesthesia
+information systems store and retrospective studies analyse. We used the waveform only to
+decide *whether* each 2-s monitor value was trustworthy, never to replace it, so calibration
+differences between monitor and waveform could not enter the comparison.
 
-Each 2-s waveform window was labelled with the first category that applied:
-
-- *zero*: mean below 15 mmHg and 2nd–98th centile range below 10 mmHg (transducer open to
-  air or being zeroed);
-
-- *high*: maximum above 250 mmHg or mean above 200 mmHg (fast flush);
-- *non-pulsatile*: range below 8 mmHg, interdecile range below 3 mmHg, or no systolic
-  upstroke (a rise above 8 mmHg within 100 ms) in the centred 6-s window. This covers a
-  stopcock turned off to the patient and an occluded or kinked line;
-
-- *noise*: minimum below −10 mmHg, or median absolute second difference ≥ 4 mmHg;
-- *valid*: none of the above.
+Each 2-s waveform window was labelled *zero* (mean below 15 mmHg with a range below 10 mmHg:
+transducer open to air), *high* (maximum above 250 or mean above 200 mmHg: fast flush),
+*non-pulsatile* (range below 8 mmHg, interdecile range below 3 mmHg, or no systolic upstroke in
+the centred 6-s window: stopcock off to the patient or occluded line), *noise* (minimum below
+−10 mmHg or a large median second difference) or otherwise *valid* (Online Resource 1).
 
 Hereafter, "artefact" means a value flagged by this classifier. Because the monitor averages
-over several beats, windows from 2 s before to 8 s after any
-artefact run were labelled *guard*. Eight seconds was the 95th centile of the time the monitor
-took to rejoin the waveform after an artefact.
+over several beats, windows from 2 s before to 8 s after any artefact run were labelled
+*guard*; 8 s was the 95th centile of the time the monitor took to rejoin the waveform.
+Thresholds were set on outcome-free data. A beat-to-beat autocorrelation criterion was
+discarded before the freeze because it labelled atrial fibrillation as artefact. Fig. 1
+shows examples.
 
-Thresholds were set on outcome-free data. A pulsatility criterion based on beat-to-beat
-autocorrelation was discarded before the freeze because it labelled atrial fibrillation as
-artefact. Figure 1 shows examples.
+Monitor numerics lag the waveform; the lag was estimated per case by maximising the
+correlation between monitor MAP and the waveform window mean (4 s in 62% of cases, 6 s in
+35%). The monitoring period ran from the first to the last uninterrupted 60 s of valid
+waveform within anaesthesia. It began a median of 9.9 min (IQR 6.3–15.8) after the start of
+anaesthesia, so much post-induction hypotension falls outside it [22].
 
-**Alignment and monitoring period.**
-
-- *Lag.* The monitor numerics lag the waveform. The lag was estimated for each case by
-  maximising the correlation between monitor MAP and the waveform window mean in valid
-  windows. It was 4 s in 62% of cases and 6 s in 35%.
-
-- *Monitoring period.* It ran from the first to the last uninterrupted 60 s of valid waveform
-  within anaesthesia. It began a median of 9.9 min (IQR 6.3–15.8) after the start of
-  anaesthesia, so much post-induction hypotension falls outside it [22].
-
-**Reference series.** The reference was the lag-aligned monitor MAP restricted to valid
-windows.
-
-- Gaps of up to 3 min, bounded on both sides by at least 30 s of valid data, were bridged by
-  linear interpolation between the medians before and after the gap. Bridging avoids a
-  systematic loss of true hypotension that coincides with blood sampling.
-
-- A minute was valid if at least half of its windows were valid or bridged.
+The reference was the lag-aligned monitor MAP restricted to valid windows. Gaps of up to
+3 min, bounded on both sides by at least 30 s of valid data, were bridged linearly between the
+medians before and after, which avoids a systematic loss of true hypotension that coincides
+with blood sampling. A minute was valid if at least half of its windows were valid or bridged.
 
 ## Retrospective pipelines
 
-A pipeline turns the monitor numbers into an exposure, using the numbers alone.
+A pipeline turns the monitor numbers into an exposure, using the numbers alone. Seven
+*filters* reproduced published rules: none (F0); range filters on MAP of 20–250 mmHg
+(F1)[13] and 30–200 mmHg (F2) [23]; a multi-signal rule (F3) [11]; a
+physiological-consistency rule (F4); F4 with removal of values differing from both neighbours
+by more than 30 mmHg (F5) [24]; and F4 with a 7-point running median (F6) [10]. Full
+definitions are in Online Resource 1. Five *resolutions* were every 2-s value (R1), one
+instantaneous value per minute (R2), the per-minute median (R3), and a value charted every
+5 min (R4) or 15 min (R5) and held; R4 and R5 were averaged over phase offsets.
 
-*Filters* reproduced published rules:
-
-- F0: none;
-- F1: MAP below 20 or above 250 mmHg removed [13];
-- F2: MAP below 30 or above 200 mmHg removed [23];
-- F3: systolic above 250, diastolic below 15, MAP below 35 or above 150, or pulse pressure
-  below 15 mmHg [11];
-
-- F4: physiological consistency (MAP below 20 or above 200; systolic below 20 or above 300;
-  systolic ≤ diastolic; pulse pressure below 5; diastolic below 5);
-
-- F5: F4, then removal of values that differ from both neighbours by more than 30 mmHg [24];
-- F6: F4, then a 7-point running median [10].
-
-*Resolutions*:
-
-- R1: every 2-s value;
-- R2: one instantaneous value per minute;
-- R3: the per-minute median;
-- R4: a value charted every 5 min and held;
-- R5: a value charted every 15 min and held.
-
-R4 and R5 were evaluated at several phase offsets, and the estimates were averaged.
-
-*Exposures*, each at thresholds of 55, 60 and 65 mmHg:
-
-- cumulative minutes below the threshold, per 10 min, capped at 120 min;
-- area under the threshold, per 100 mmHg·min, capped at the reference's 99th centile;
-- time-weighted average below the threshold, in mmHg;
-- the binary exposure "≥ 10 min below the threshold".
-
-The reference was processed at every resolution in the same way. Each pipeline was compared
-with the reference at the same resolution, so the contrast isolates waveform-based
-cleaning. In total there were 420 pipeline specifications.
+*Exposures* at thresholds of 55, 60 and 65 mmHg were cumulative minutes below the threshold
+(per 10 min, capped at 120 min), area under the threshold (per 100 mmHg·min, capped at the
+reference's 99th centile), time-weighted average below the threshold (per mmHg) and the binary
+"≥ 10 min below the threshold". Each of the 420 pipeline specifications was compared with the
+reference processed the same way at the same resolution, so the contrast isolates
+waveform-based cleaning.
 
 ## Outcomes and covariates
 
@@ -249,299 +188,154 @@ The primary outcome was AKI by the KDIGO creatinine criteria [25]: an increase o
 ≥ 0.3 mg dL^−1^ within 48 h, or ≥ 1.5 times baseline within 7 days. Baseline was the last
 creatinine within 30 days before surgery, otherwise the preoperative value.
 
-Models were adjusted for:
-
-- age and eGFR, as restricted cubic splines;
-- sex, body mass index, ASA physical status ≥ 3 and emergency surgery;
-- hypertension and diabetes;
-- preoperative haemoglobin and albumin;
-- department and surgical approach;
-- log anaesthesia duration.
-
-Vasopressors, fluids and blood loss were not included, because they may lie on the causal
-path. With 91 events and 21 parameters there were 4.3 events per parameter. We
-used Firth-penalised logistic regression with Wald intervals [26], and the two models that form each ratio
-share the same adjustment set.
+Models were adjusted for age and eGFR (restricted cubic splines), sex, body mass index, ASA
+physical status ≥ 3, emergency surgery, hypertension, diabetes, preoperative haemoglobin and
+albumin, department, surgical approach and log anaesthesia duration. Vasopressors, fluids and
+blood loss were not included, because they may lie on the causal path. With 91 events and 21
+parameters there were 4.3 events per parameter. We used Firth-penalised logistic regression
+with Wald intervals [26], and the two models that form each ratio share the same
+adjustment set.
 
 ## Statistical analysis
 
 **Measurement error.** Each recorded minute with MAP below 65 mmHg was classed against the
-reference at the same resolution:
-
-- *spurious*: reference ≥ 65 mmHg;
-- *confirmed*: reference < 65 mmHg;
-- *indeterminate*: no valid reference. Indeterminate minutes were never counted as artefact.
-
-*Masked* minutes were reference minutes below 65 mmHg that the pipeline recorded as ≥ 65 mmHg.
-For the binary exposure we report κ and the number of patients whose category differed.
-Proportions have patient-cluster bootstrap CIs.
+reference at the same resolution as *spurious* (reference ≥ 65 mmHg), *confirmed* (reference
+< 65 mmHg) or *indeterminate* (no valid reference; never counted as artefact). *Masked*
+minutes were the converse. For the binary exposure we report κ and the number of patients whose
+category differed; proportions have patient-cluster bootstrap CIs.
 
 **Primary estimand.** The primary estimand was the ratio of odds ratios, ROR =
 OR~pipeline~ / OR~reference~, for AKI with the binary exposure "≥ 10 min below 65 mmHg". It
 compared F1 × R3 with the reference at R3, using the same adjustment set and the same
-patients. The ROR is largely insensitive to confounding that the two series share.
+patients, so it is largely insensitive to confounding that the two series share. We
+pre-specified an equivalence margin of 0.80–1.25, the conventional margin symmetric on the log
+scale: an interval inside the margin meant equivalent; an interval excluding 1 with a point
+estimate outside the margin meant material change; anything else was inconclusive.
 
-We pre-specified an equivalence margin of 0.80–1.25, the conventional margin symmetric on the
-log scale:
-
-- an interval inside the margin: equivalent;
-- an interval excluding 1, with a point estimate outside the margin: material change;
-- anything else: inconclusive.
-
-Because the two exposures differ in only a few patients, the percentile bootstrap interval is
-too narrow. Across 100 outcome permutations, in which the true ROR is 1, it covered 1 in only
-51%. A rule written before the real outcome was examined therefore set every ROR-type
-interval to:
+Because the two exposures differ in only a few patients, the percentile bootstrap interval
+covered the true ROR of 1 in only 51% of 100 outcome permutations. A rule written before the
+real outcome was examined therefore set every ROR-type interval to:
 
   log ROR ± 1.96 × max(paired-bootstrap SE, SD over 200 outcome permutations).
 
-We checked this interval by its coverage under independent permutations, and by simulating
+We checked this interval by its coverage under independent permutations and by simulating
 outcomes from the adjusted reference model with differential error placed at the margin
-(Supplementary Methods).
+(Online Resource 1).
 
-**Secondary analyses.**
+**Secondary analyses** were the ROR for all 35 filter × resolution cells with simultaneous 95%
+bands, the slope per 10 min below 65 mmHg, the specification curve and the effect of
+resolution on the reference itself.
 
-- The same ROR for all 35 filter × resolution cells, with simultaneous 95% bands.
-- The slope per 10 min below 65 mmHg.
-- The full specification curve over metrics and thresholds.
-- The effect of resolution on the reference itself.
+**Differential misclassification.** We regressed AKI on log(1 + spurious minutes per
+monitored hour), adjusting for the reference exposure (linear and spline terms), log monitored
+hours and the adjustment set. We used the raw 2-s stream (F0 × R1), because at F1 × R3
+spurious minutes were non-zero in too few patients (amendment A14, before the freeze). The
+negative control was spurious hypertensive minutes: pipeline MAP above 120 mmHg while the
+reference was ≤ 100 mmHg.
 
-**Differential misclassification.** We regressed AKI on log(1 + spurious minutes per monitored
-hour), adjusting for:
+**Episodes.** Each run of monitor MAP below 65 mmHg was classed as *waveform-flagged* (≥ 50% of
+its windows labelled artefact), *guard-dominated* or *physiological*, and the probability of
+being flagged was tabulated by final duration and nadir; a pre-specified depth-2 tree searched
+for a simple rule. Post hoc, we also tabulated it by elapsed duration and nadir so far.
 
-- the reference exposure (linear and spline terms);
-- log monitored hours;
-- the adjustment set.
+**Validation of the reference.** We compared flagged and physiological episodes against
+independent signals (cuff MAP, ECG and plethysmographic pulse rate). Injection–recovery of
+synthetic artefacts after Li et al [27]. checked the implementation only, and a blinded AI
+rater scored 152 snippets (Online Resource 1).
 
-We used the raw 2-s stream (F0 × R1), because at F1 × R3 spurious minutes were non-zero in too
-few patients (amendment A14, made before the freeze). The negative control was spurious
-hypertensive minutes: pipeline MAP above 120 mmHg while the reference was ≤ 100 mmHg.
+**Sensitivity analyses.** Pre-specified sensitivity analyses varied the reference
+definition, the monitoring period, the adjustment set and the outcome (Online Resource 1). Two
+of them, S4 and S6, had been omitted by error and were run after unblinding.
 
-**Episodes.** Each run of monitor MAP below 65 mmHg was classed as:
-
-- *waveform-flagged*: ≥ 50% of its windows labelled artefact;
-- *guard-dominated*;
-- *physiological*.
-
-We tabulated the probability that an episode was flagged by final duration and nadir. The
-protocol specified a depth-2 decision tree for a simple rule; the best rule was a single
-split, which is reported. Post
-hoc, we also tabulated it by elapsed duration and nadir so far, which is what is known while
-an episode unfolds.
-
-**Validation of the reference.**
-
-- *Independent signals:*
-  - cuff MAP within 60 s of an episode;
-  - ECG and plethysmographic pulse rate during non-pulsatile windows and deep episodes;
-  - the non-pulsatile fraction in atrial fibrillation.
-- *Injection–recovery* of synthetic artefacts after Li et al. [27], with amplitude and
-  duration varied post hoc. The injections resemble the classifier's own rules, so this is an
-  implementation check rather than independent validation.
-
-- *A blinded AI rating* of 152 snippets (Supplementary Methods).
-
-**Sensitivity analyses.** The pre-specified sensitivity analyses varied:
-
-- the reference: guard length, pulse-pressure threshold, minute validity, bridging, and the
-  waveform mean in place of the monitor value;
-
-- the monitoring period;
-- the adjustment set;
-- the outcome: AKI stage ≥ 2; missing postoperative creatinine counted as no AKI (S4);
-  transplantation included (S6).
-
-S4 and S6 had been omitted by error and were run after unblinding. Post hoc analyses are
-listed with them in Table S5.
-
-Analyses used Python 3.10 (NumPy, SciPy, pandas). The classifier, Firth regression, splines,
-bootstrap and permutation code were written by the author and unit-tested.
+Analyses used Python 3.10 (NumPy, SciPy, pandas), with study code that was unit-tested.
 
 # Results
 
 ## Participants
 
-Of 3,645 cases with an arterial waveform track, 3,434 had a retrievable waveform and 3,429 had
-a monitoring period. The descriptive cohort comprised 3,249 patients. Together they had
-11,466 h of monitoring, a median of 193 min per patient (IQR 134–272).
-
-The AKI analysis set comprised 2,563 patients, of whom 91 (3.6%) developed AKI (Figure S1;
-Table 1). Inclusion in the AKI set depended on postoperative creatinine testing. Of
-non-transplant patients in the descriptive cohort, the AKI set included:
-
-- 96% of thoracic patients;
-- 97% of urology patients;
-- 85% of general surgery patients;
-- 28% of gynaecology patients.
+Of 3,645 cases with an arterial waveform track, 3,429 had a retrievable waveform and a
+monitoring period. The descriptive cohort comprised 3,249 patients with a median of 193 min of
+monitoring (IQR 134–272). The AKI analysis set comprised
+2,563 patients, of whom 91 (3.6%) developed AKI (Table 1; Fig. S1 in Online Resource 1). Inclusion in the AKI set
+depended on postoperative creatinine testing: it included 85–97% of non-transplant patients in
+general, thoracic and urological surgery but 28% in gynaecology.
 
 ## How much of the arterial record is artefact
 
 Within the monitoring period, 96.3% of 2-s windows were valid. Artefact proper accounted for
-2.3%:
+2.3% (*high* 1.2%, *non-pulsatile* 0.7%, *noise* 0.2%, *zero* 0.07%) and guard margins for a
+further 1.4%. Artefact events were nonetheless common: 98% of patients had at least one flush
+and 90% a non-pulsatile run (Online Resource 1).
 
-- *high* 1.2%;
-- *non-pulsatile* 0.7%;
-- *noise* 0.2%;
-- *zero* 0.07%.
-
-Guard margins accounted for a further 1.4%. Inside the monitoring period the waveform was
-never missing: the analogue channel records continuously, and the period is bounded by valid
-data.
-
-Artefact events were common:
-
-| Artefact type | Patients with at least one event | Events per monitored hour |
-|---|---|---|
-| Flush | 98% | 2.6 |
-| Noise | 97% | 2.7 |
-| Non-pulsatile run | 90% | 2.0 |
-| Zeroing | 33% | 0.2 |
-
-In valid windows, monitor MAP and the waveform mean differed by more than 10 mmHg in a median
-of 0.5% of windows per patient.
-
-**Artefact around cuff measurements** (Figure 2). In 2,579 patients with both arterial and
+**Artefact around cuff measurements** (Fig. 2). In 2,579 patients with both arterial and
 cuff pressure, 14.0% of arterial windows in the 60 s before a new cuff value were labelled
 artefact, against 1.8% at other times (19,560 readings). The excess peaked 22 s before the
-value appeared, during the oscillometric cycle. At the peak 25.8% of windows were artefact,
-against 4.3% 4–5 min earlier.
-
-The peak was almost entirely *non-pulsatile* trace: 22.4% against 1.7% at baseline. Flush
-labels barely rose (2.3% against 1.7%).
-
-Post hoc, the excess:
-
-- was present at regularly cycled readings (12.2% of windows), which are probably automatic,
-  as well as at irregular ones (17.0%);
-
-- was larger with radial catheters (13.9% vs 1.8% at other times; 2,219 patients) than with
-  pedal or femoral catheters, which an arm cuff cannot occlude (9.7% vs 3.4%; 58 patients;
-  per-patient Mann–Whitney p < 0.001);
-
-- was larger with right than with left radial catheters. In 60% of patients with a right and
-  31% with a left radial catheter, at least 10% of arterial windows in the minute before cuff
-  readings were artefact.
-
-The 4.3% baseline 4–5 min before a reading is above the 1.8% seen at other times because it
-includes the previous cuff cycle. The cuff arm is not recorded in VitalDB.
+value appeared, during the oscillometric cycle, at 25.8% of windows, and was almost entirely
+*non-pulsatile* trace (22.4% against 1.7% at baseline). Post hoc, it was larger with radial catheters
+(13.9% vs 1.8%; 2,219 patients) than with pedal or femoral catheters, which an arm cuff cannot
+occlude (9.7% vs 3.4%; 58 patients; p < 0.001), and with right than left radial catheters
+(Online Resource 1). The cuff arm is not recorded in VitalDB.
 
 ## Spurious and masked hypotension
 
 At the per-minute median resolution (R3) with filter F1, 0.66% (95% CI 0.58–0.74) of recorded
-minutes with MAP below 65 mmHg were spurious (Figure 3; Table S1). Spurious fractions were
-higher:
-
-- with one instantaneous value per minute (R2): 3.3% (3.0–3.6), which is 4–10 times the R3
-  value for filters F0–F5;
-
-- with the raw 2-s stream (R1): 2.0% (1.9–2.2).
-
-Filters F3–F5 removed most spurious minutes at R1 and R3 (0.3–0.9%), but not at R2
-(1.8–3.3%). The 7-point running median (F6) behaved differently from every other filter:
-
-- it created spurious minutes: 7.5% at R3 and 9.9% at R2;
-- it masked 20% (R3) to 24% (R2) of true hypotensive minutes.
+minutes with MAP below 65 mmHg were spurious (Fig. 3; Table S1). With one instantaneous value
+per minute (R2) the fraction was 3.3% (3.0–3.6), 4–10 times the R3 value for filters F0–F5,
+and with the raw 2-s stream (R1) 2.0% (1.9–2.2). Filters F3–F5 removed most spurious minutes at
+R1 and R3 (0.3–0.9%), but not at R2 (1.8–3.3%). The 7-point running median (F6) behaved
+differently from every other filter: it created spurious minutes (7.5% at R3, 9.9% at R2) and
+masked 20% (R3) to 24% (R2) of true hypotensive minutes.
 
 **Binary exposure.** Against the reference at the same resolution, "≥ 10 min below 65 mmHg"
-was classified with κ 0.95–0.99 by every filter except F6 at R2–R5 (Table S2). With F1 × R3, 38 of
-3,249 patients (1.2%; 33 in the AKI set) changed exposure category, 32 of them upwards; 30 of the 38 had 5–10
-reference minutes.
-
-Resolution changed exposure prevalence more than any filter. In the reference series itself,
-42.4% of patients were exposed at R3, 51.2% at R4 and 53.2% at R5.
-
-The 7-point median applied to charted data erased most exposure: κ was 0.39 at R4 and 0.20
-at R5.
+was classified with κ 0.95–0.99 by every filter except F6 at R2–R5 (Table S2). With F1 × R3, 38
+of 3,249 patients (1.2%; 33 in the AKI set) changed exposure category, 32 of them upwards; 30
+of the 38 had 5–10 reference minutes. Resolution changed exposure prevalence more than any
+filter: in the reference itself, 42.4% of patients were exposed at R3, 51.2% at R4 and 53.2% at
+R5. The 7-point median applied to charted data erased most exposure (κ 0.39 at R4, 0.20 at R5).
 
 ## Which recorded low-pressure episodes are waveform-flagged
 
-Of 106,725 recorded episodes of MAP below 65 mmHg in 3,123 patients:
+Of 106,725 recorded episodes of MAP below 65 mmHg in 3,123 patients, 8,471 (7.9%) were
+waveform-flagged; they accounted for 4.3% of hypotensive minutes. The proportion flagged depended steeply on
+final duration and nadir (Table 2): 65–90% of episodes lasting ≤ 60 s with a nadir below
+40 mmHg, but ≤ 2.4% of episodes with a nadir of 55–64 mmHg and ≤ 2% of episodes lasting more
+than 1 min with a nadir ≥ 40 mmHg.
 
-- 8,471 (7.9%) were waveform-flagged;
-- 3,909 (3.7%) were guard-dominated;
-- 94,345 (88.4%) were physiological.
-
-Flagged episodes accounted for 4.3% of hypotensive minutes. The proportion flagged depended
-steeply on final duration and nadir (Table 2):
-
-- 65–90% of episodes lasting ≤ 60 s with a nadir below 40 mmHg;
-- 59–65% of episodes lasting ≤ 30 s with a nadir of 40–54 mmHg;
-- ≤ 2.4% of episodes with a nadir of 55–64 mmHg;
-- ≤ 2% of episodes lasting more than 1 min with a nadir ≥ 40 mmHg.
-
-Final duration is not known while an episode unfolds. Post hoc, we therefore also looked at
-episodes still below 65 mmHg after a given time, by the nadir so far (Table S3):
-
-| Nadir so far | at 10 s | at 30 s | at 60 s | at 120 s |
-|---|---|---|---|---|
-| 20–39 mmHg | 79% flagged | 57% | 8% | 2% |
-| below 20 mmHg | 75% | 59% | 44% | 29% |
+Because final duration is not known while an episode unfolds, we also looked post hoc at
+episodes still below 65 mmHg after a given time (Table S3). Of falls to 20–39 mmHg, 79% were
+flagged at 10 s, 57% at 30 s and 8% at 60 s; falls below 20 mmHg were still flagged in 29% at
+2 min.
 
 A single rule, a fall of more than 20 mmHg from the preceding 30-s maximum, identified flagged
-episodes in a validation half of patients with:
-
-- sensitivity 0.89;
-- specificity 0.92;
-- positive predictive value 0.46.
-
-This specificity came from trivial dips. Across all episodes with a nadir below 40 mmHg it was
-0.07.
+episodes in a validation half of patients with sensitivity 0.89, specificity 0.92 and positive
+predictive value 0.46. This specificity came from trivial dips: across episodes with a nadir
+below 40 mmHg it was 0.07.
 
 ## Validation of the reference
 
-**Cuff pressure.** The pre-specified check used a cuff MAP within 3 min of an episode. The cuff
-MAP was ≥ 70 mmHg in:
+**Cuff pressure.** A cuff MAP within 3 min of an episode was ≥ 70 mmHg in 84% (95% CI 83–85) of
+4,506 flagged episodes and 46% (45–47) of 10,967 physiological episodes. Restricting post hoc to
+deep episodes (nadir below 40 mmHg) and a cuff value within 60 s, the proportions were 81%
+(79–82) of 2,081 flagged and 28% (24–32) of 443 physiological episodes. About one flagged deep
+episode in five may therefore have been real, and some "physiological" deep episodes were
+probably missed artefact.
 
-- 84% (95% CI 83–85) of 4,506 flagged episodes;
-- 46% (45–47) of 10,967 physiological episodes.
-
-Restricting post hoc to deep episodes (nadir below 40 mmHg) and a cuff value within 60 s, the
-cuff MAP was ≥ 70 mmHg in 81% (79–82) of 2,081 flagged episodes and 28% (24–32) of 443
-physiological ones. Two consequences follow:
-
-- about one flagged deep episode in five had a low cuff pressure nearby and may have been
-  real;
-
-- some deep episodes classed as physiological were probably artefact that the classifier
-  missed.
-
-**Pulse.** In non-pulsatile windows:
-
-- the ECG rate was 40–150 min^−1^ in 97.8% of 153,662 windows;
-- the plethysmographic pulse rate was in that range in 92.6%.
-
-An ECG rate alone cannot exclude pulseless electrical activity. A plethysmographic pulse was
-present in deep flagged and deep physiological episodes alike (98% and 97.5% of windows).
-
-**Atrial fibrillation.** The non-pulsatile fraction was not higher in the 13 patients with
-preoperative atrial fibrillation (0.17% vs 0.68%).
-
-**Injection–recovery** (Table S8). Detected: flushes lasting ≥ 2 s or reaching 250 mmHg,
-open-transducer levels up to 25 mmHg, and sampling. Rarely or never detected: short flushes of
-200 mmHg or less, over-damping, partial occlusion (except severe), drift and ringing.
-
-**Blinded AI rating** (secondary; Table S9). Agreement was 97.7% (κ 0.95; n = 131 after
-excluding guard and "unsure").
+**Other checks** (Online Resource 1). In non-pulsatile windows the ECG rate was 40–150 min^−1^
+in 97.8% and the plethysmographic pulse rate in 92.6% of 153,662 windows, and the non-pulsatile
+fraction was not higher in atrial fibrillation. Injection–recovery detected flushes lasting
+≥ 2 s or reaching 250 mmHg, open-transducer levels up to 25 mmHg and sampling, but rarely
+over-damping, partial occlusion, drift or ringing (Table S8). The blinded AI rater agreed with
+the classifier in 97.7% of snippets (κ 0.95; n = 131; Table S9).
 
 ## Association with acute kidney injury
 
-**The reference association.** For ≥ 10 min below 65 mmHg the odds ratio for AKI was:
-
-- crude: 1.65 (1.09–2.51);
-- adjusted for age, eGFR, ASA and emergency: 1.46 (0.95–2.25);
-- fully adjusted: 0.94 (0.60–1.48);
-- fully adjusted without anaesthesia duration: 1.10 (0.70–1.71).
-
-Because this exposure is cumulative, adjusting for duration removes part of its variance.
-
-Other exposures were associated with AKI after full adjustment (Table S11):
-
-- ≥ 10 min below 60 mmHg: 1.71 (1.04–2.79);
-- area below 65 mmHg: 1.24 per 100 mmHg·min (1.07–1.45);
-- time-weighted average below 65 mmHg: 1.27 per mmHg (1.00–1.60).
-
-For ≥ 10 min below 55 mmHg the odds ratio was 1.95 (0.89–4.27), and per 10 min below 65 mmHg
-it was 1.08 (0.99–1.17).
+**The reference association.** For ≥ 10 min below 65 mmHg the odds ratio for AKI was 1.65
+(1.09–2.51) crude, 1.46 (0.95–2.25) adjusted for age, eGFR, ASA and emergency, 0.94 (0.60–1.48)
+fully adjusted and 1.10 (0.70–1.71) fully adjusted without anaesthesia duration; because this
+exposure is cumulative, adjusting for duration removes part of its variance. Other exposures
+were associated with AKI after full adjustment (Table S11): ≥ 10 min below 60 mmHg, 1.71
+(1.04–2.79); area below 65 mmHg, 1.24 per 100 mmHg·min (1.07–1.45); and time-weighted average
+below 65 mmHg, 1.27 per mmHg (1.00–1.60).
 
 **Primary estimand.** With F1 × R3 the fully adjusted odds ratio was 0.90 (0.57–1.42). The ROR
 was 0.96 (95% CI 0.86–1.06; permutation p = 0.42), and the pre-specified verdict was
@@ -549,258 +343,138 @@ equivalent.
 
 The contrast rested on the 33 patients in the AKI set whose exposure category differed: 28
 moved up and 5 moved down. None developed AKI, against 1.6 expected from the adjusted reference
-model. The verdict depends on how many of the 28 upward-moved patients developed AKI (post hoc;
-Table S7):
+model. Post hoc, with one AKI case among the 28 upward-moved patients the
+ROR would have been 1.01 (0.90–1.14), still equivalent, and with two 1.07 (0.90–1.27),
+inconclusive (Table S7). Two or more cases had probability 0.36 under the reference model, so
+the equivalence verdict is fragile. In simulations from the adjusted reference model, the interval
+rule declared equivalence in 82% of datasets without differential error and in 5% of datasets
+where differential error placed the median ROR at 1.24.
 
-| AKI cases among the 28 | ROR (95% CI) | Verdict |
-|---|---|---|
-| 0 (observed) | 0.96 (0.86–1.07) | equivalent |
-| 1 | 1.01 (0.90–1.14) | equivalent |
-| 2 | 1.07 (0.90–1.27) | inconclusive |
-| 3 | 1.13 (0.94–1.36) | inconclusive |
+**Where the reference association was present** (post hoc), pipeline and reference estimates
+were close: ROR 0.98 (0.85–1.15) for ≥ 10 min below 60 mmHg, 1.00 (0.97–1.03) for area below
+65 mmHg and 1.01 (0.95–1.06) for time-weighted average below 65 mmHg. At 55 mmHg the binary ROR
+was imprecise: 1.28 (0.81–2.02) with F1 and 1.10 (0.84–1.45) with F3; the pipeline odds ratio,
+2.49 (1.22–5.08), crossed nominal significance where the reference, 1.95 (0.89–4.27), did not.
 
-Under the reference model, two or more cases would have occurred with probability 0.36. The
-equivalence verdict is therefore fragile.
+**All 35 filter × resolution cells** (Table 3; Fig. 4). No 95% interval or simultaneous band
+excluded 1. Twenty-five cells were equivalent pointwise and 19 under simultaneous bands; the ten
+inconclusive cells were F0–F2 at R1, F2–F4 and F6 at R2, and F6 at R3–R5. Coarser resolution of the
+reference itself did not detectably change the odds ratio (0.93–1.10 relative to R3).
 
-In simulations from the adjusted reference model, the interval rule declared equivalence:
-
-- in 82% of datasets without differential error;
-- in 5% of datasets where differential error placed the median ROR at 1.24.
-
-**Where the reference association was present** (post hoc). The pipeline and reference
-estimates were close:
-
-| Exposure | ROR (95% CI) |
-|---|---|
-| ≥ 10 min below 60 mmHg | 0.98 (0.85–1.15) |
-| Area below 65 mmHg | 1.00 (0.97–1.03) |
-| Time-weighted average below 65 mmHg | 1.01 (0.95–1.06) |
-
-At 55 mmHg the binary ROR was imprecise: 1.28 (0.81–2.02) with F1 and 1.10 (0.84–1.45) with
-F3. The pipeline odds ratio, 2.49 (1.22–5.08), crossed nominal significance where the
-reference, 1.95 (0.89–4.27), did not.
-
-Per 10 min below 65 mmHg the pipeline slope was 1.09 (1.00–1.18) against 1.08 (0.99–1.17) for
-the reference. The difference in log-odds was 0.007 (−0.005 to 0.019).
-
-**All 35 filter × resolution cells** (Table 3; Figure 4). No 95% interval or simultaneous band
-excluded 1. Twenty-five cells were equivalent pointwise and 19 under simultaneous bands. The
-ten inconclusive cells were:
-
-- F0–F2 at R1;
-- F2, F3, F4 and F6 at R2;
-- F6 at R3–R5.
-
-Four cells at R2 lay within 0.002 of the upper margin, two on each side. Excluding F6, the
-point estimates ranged from 0.94 to 1.12. Coarser resolution of the reference itself did not
-detectably change the odds ratio: relative to R3 it was 0.93–1.10, with intervals from 0.76
-to 1.42.
-
-**Exposure metric** (Figures S2–S4; Table S4). Across 420 specifications the median ROR was 0.99
-(IQR 0.95–1.01). Minute-based exposures were insensitive to processing (RORs 0.92–1.02).
-Area-based exposures below 55 mmHg were not:
-
-- without a filter, 37% of the total area below 55 mmHg was artefact, half of it in 1% of
-  patients;
-
-- with F1 it was 13%, and with F3 none;
-- the corresponding RORs were large but imprecise (post hoc; time-weighted average, F0:
-  0.30, 0.06–1.53).
-
-The interval for the odds ratio excluded 1 in 181 of 420 pipeline specifications and in 33 of
-105 reference specifications. In 90 specifications, mostly area-based, the pipeline and the
-reference differed in statistical significance.
+**Exposure metric** (Figs. S2–S4; Table S4). Across 420 specifications the median ROR was 0.99
+(IQR 0.95–1.01), and minute-based exposures were insensitive to processing (0.92–1.02).
+Area-based exposures below 55 mmHg were not: without a filter, 37% of the total area below
+55 mmHg was artefact, half of it in 1% of patients (13% with F1, none with F3), and the
+corresponding RORs were large but imprecise (post hoc). In 90 of 420 specifications, mostly
+area-based, pipeline and reference differed in statistical significance.
 
 **Sensitivity analyses** (Table S5). Of 16 sensitivity analyses with an interval, 14 were
-equivalent (RORs 0.94–0.97, intervals within 0.83–1.10). These included the pre-specified S4
-and S6, the exclusion of gynaecology and the disease-risk score.
-
-Two were inconclusive:
-
-- the waveform-mean reference (pre-specified), 0.74 (0.48–1.16). It changes calibration as
-  well as cleaning, so it does not isolate artefact handling, and we cannot exclude a real
-  difference;
-
-- the numerics-defined monitoring period, 0.91 (0.75–1.11).
-
-Adjustment for blood loss and for the number of creatinine measurements, and AKI stage ≥ 2,
-gave point estimates of 0.95–0.97 without intervals. The creatinine count follows surgery and
-is exploratory.
+equivalent (RORs 0.94–0.97), including the pre-specified S4 and S6. The two inconclusive ones were
+the waveform-mean reference (0.74, 0.48–1.16), which also changes calibration, and the
+numerics-defined monitoring period (0.91, 0.75–1.11).
 
 **Differential misclassification** (Table S6). Spurious hypotension on the raw stream was
-unrelated to how often arterial blood was sampled (Spearman ρ 0.005, p = 0.81), and weakly,
-inversely correlated with ASA class (ρ −0.06, p = 0.006).
-
-Adjusted for reference exposure, the odds ratio for AKI was:
-
-- 0.93 (0.74–1.16) per SD of spurious minutes;
-- 0.59 (0.12–2.86) per unit of log(1 + minutes per hour).
-
-The pre-specified negative control, fitted in the same model, gave 1.17 (0.96–1.43) per SD;
-fitted separately it gave 1.16 (0.95–1.42). These estimates are imprecise. They show no
-evidence of differential error but cannot exclude a modest amount.
+unrelated to how often arterial blood was sampled (Spearman ρ 0.005, p = 0.81). Adjusted for
+reference exposure, the odds ratio for AKI was 0.93 (0.74–1.16) per SD of spurious minutes; the
+negative control gave 1.17 (0.96–1.43). These estimates show no evidence of differential error
+but cannot exclude a modest amount.
 
 # Discussion
 
 ## Principal findings
 
-In 3,249 patients with a high-resolution arterial waveform, artefacts were frequent events but
-a small part of recorded hypotension. With a per-minute median and a range filter, fewer than
-1% of hypotensive minutes were spurious, and the exposure category changed in 1.2% of
-patients.
+Artefacts were frequent events but a small part of recorded hypotension: with a per-minute
+median and a range filter, fewer than 1% of hypotensive minutes were spurious, and the exposure
+category changed in 1.2% of patients.
 
 For the pre-specified exposure, ≥ 10 min below 65 mmHg, the adjusted association with AKI was
 null (odds ratio 0.94), so non-differential error had little to act on. The equivalence of
-pipeline and reference (ROR 0.96) therefore mainly tests *differential* error. That is the
-scenario in which artefact recorded preferentially in patients destined for AKI would
-manufacture an association.
+pipeline and reference (ROR 0.96) therefore mainly tests *differential* error: artefact
+recorded preferentially in patients destined for AKI, which would manufacture an association.
+We found no evidence of it. None of the 33 patients whose category changed developed AKI, and
+spurious hypotension was unrelated to blood sampling and to AKI. The verdict is fragile,
+however: two AKI cases among the 28 patients moved upwards would have made it inconclusive,
+an outcome with a probability of about one in three under the reference model. Where the
+reference did show an association (≥ 10 min below 60 mmHg; area and time-weighted average below
+65 mmHg), the pipeline estimates were within a few per cent of the reference (post hoc).
 
-We found no evidence of it:
-
-- none of the 33 patients whose category changed developed AKI;
-- spurious hypotension was unrelated to blood sampling and showed no detectable association
-  with AKI.
-
-The verdict is fragile, however. Two AKI cases among the 28 patients moved upwards would have
-made it inconclusive, and under the reference model such an outcome had a probability of about
-one in three.
-
-Two further observations support the robustness of duration-based exposures:
-
-- *Where the reference showed an association* (≥ 10 min below 60 mmHg; area and time-weighted
-  average below 65 mmHg), the pipeline estimates were within a few per cent of the reference
-  (post hoc).
-
-- *At 55 mmHg* the pipeline estimate was higher than the reference, but imprecise.
-
-Three processing choices mattered more than the filter:
-
-- **The 7-point running median.** It created spurious hypotension and masked a fifth of true
-  hypotension.
-
-- **Unfiltered area-based exposures below 55 mmHg.** Zero and flush values in a few patients
-  inflated them: over a third of the area was artefact.
-
-- **Resolution.** It changed the share of exposed patients by a fifth, without a detectable
-  change in the odds ratio.
+Three processing choices mattered more than the filter. The 7-point running median created
+spurious hypotension and masked a fifth of true hypotension. Unfiltered area-based exposures
+below 55 mmHg were inflated by zero and flush values in a few patients: over a third of the
+area was artefact. Resolution changed the share of exposed patients by a fifth, without a
+detectable change in the odds ratio.
 
 ## Comparison with previous work
 
-Pasma et al. found that the choice among eight filters changed the incidence of hypotension
-up to twofold, but changed the association with myocardial injury little [10].
-Jacobsson et al. showed against a waveform reference that coarse sampling inflates measured
-hypotension [11]. Both comparisons were between pipelines, or extrapolated to outcomes.
-
-Our study adds:
-
-- an external, waveform-referenced comparator at every resolution;
-- a direct, pre-specified estimate of the outcome effect;
-- a test for differential error.
-
-We agree with both on duration-based exposures. Unlike Pasma et al., we found that the
-7-point median distorts exposure substantially, even when the ratio of odds ratios stays
-near 1. The AWAKE trial showed that the monitoring method changes measured and treated hypotension
-at induction [28]. Our resolution results are the retrospective counterpart.
+Pasma et al. found that the choice among eight filters changed the incidence of hypotension up
+to twofold but the association with myocardial injury little [10]; Jacobsson et al.
+showed against a waveform reference that coarse sampling inflates measured
+hypotension [11]. We add a waveform-referenced comparator at every resolution, a
+pre-specified estimate of the outcome effect and a test for differential error. We agree with
+both on duration-based exposures; unlike Pasma et al., we found that the 7-point median
+distorts exposure substantially even when the ratio of odds ratios stays near 1. The AWAKE
+trial showed that the monitoring method changes measured and treated hypotension at
+induction [28]; our resolution results are the retrospective counterpart.
 
 Wax et al [29]. and a recent preprint from the MOVER cohort [30] treated disagreement between
 cuff and arterial pressure as clinical information. Arterial artefact rose sixfold during the
-cuff cycle, mostly as a non-pulsatile trace. This is a measurement mechanism that generates
-such disagreement. The pattern fits occlusion of the cannulated arm in part, because the
-excess was:
+cuff cycle, mostly as a non-pulsatile trace, which is a measurement mechanism that generates
+such disagreement. The pattern by catheter site fits occlusion of the
+cannulated arm in part, but a smaller excess with pedal and femoral catheters shows that this
+is not the whole explanation, and because VitalDB does not record the cuff arm, occlusion
+remains a hypothesis. Studies of discordance should check whether their results
+survive excluding arterial values from the cuff cycle.
 
-- larger with radial than with lower-limb catheters;
-- larger on the right than on the left;
-- present at regularly cycled readings;
-- mostly not flush.
-
-A smaller excess with pedal and femoral catheters shows that this is not the whole
-explanation, and because VitalDB does not record the cuff arm, occlusion remains a hypothesis.
-Studies of discordance should check whether their results survive excluding arterial values
-from the cuff cycle.
-
-Earlier work compared artefact detection algorithms with human annotation of stored
-values [7, 31], and a scoping review found no agreed reference standard for
-arterial artefact [32]. Our approach uses the waveform only to decide whether a monitor
-value can be trusted. It can be reproduced on any dataset that stores both.
+Earlier work compared artefact algorithms with human annotation of stored
+values [7, 31], and no reference standard for arterial artefact is
+agreed [32]. Our approach uses the waveform only to decide whether a monitor value can be
+trusted, and can be reproduced on any dataset that stores both.
 
 ## Implications
 
-**For investigators:**
+Investigators should use a per-minute median with a range filter, or a rule such as F3, report
+resolution as carefully as threshold, and avoid running-median smoothing and unfiltered area-
+or time-weighted exposures below 55 mmHg. Paired multiverse comparisons should check the
+coverage of their intervals before unblinding: here, percentile intervals covered the truth in
+half of null datasets.
 
-- Use a per-minute median with a range filter, or a rule such as F3, and report resolution as
-  carefully as threshold.
-
-- Do not use running-median smoothing to estimate exposure.
-- Do not compute area- or time-weighted exposures below 55 mmHg from unfiltered data.
-- In paired multiverse comparisons, check the operating characteristics of intervals before
-  unblinding, at the null and at the decision margins. Permutation alone checks only the
-  null. In our data, percentile intervals covered the truth in half of null datasets.
-
-**For alarm design and retrospective cleaning:**
-
-- These probabilities are retrospective and describe a population. They must not be used to
-  delay treatment, and a sudden fall should be treated as real until the waveform shows
-  otherwise.
-
-- At 10 s, one in five falls to 20–39 mmHg was not flagged. One in five flagged deep episodes
-  had a low cuff pressure within a minute.
-
-- Many very brief, very deep recorded falls were waveform-flagged in retrospect (post hoc).
-  A fall below 20 mmHg was still flagged in more than a quarter of cases at 2 min.
-
-- An automated system could use such probabilities to *annotate* a probable artefact, never to
-  *suppress* an alarm. A simple drop rule does not separate deep artefacts from deep real
-  events: below 40 mmHg its specificity was 0.07.
-
-- Where possible, the cuff should be placed on the limb opposite an arterial line [9].
-  The cuff remains an essential cross-check of the arterial line.
+The episode probabilities are retrospective and describe a population. They must not be used to
+delay treatment: a sudden fall should be treated as real until the waveform shows otherwise. At 10 s, one in five falls to 20–39 mmHg was not
+flagged, and one in five flagged deep episodes had a low cuff pressure within a minute. An
+automated system could use such probabilities to *annotate* a probable artefact, never to
+*suppress* an alarm; a simple drop rule does not separate deep artefacts from deep real events
+(specificity 0.07 below 40 mmHg). Where possible, the cuff should be placed on the limb
+opposite an arterial line [9], and it remains an essential cross-check of the line.
 
 ## Strengths and limitations
 
-The reference comes from the waveform recorded alongside the numbers and never replaces
-monitor values. The protocol was frozen after a permuted dry run, and every later change is
-documented. The reference was checked against independent signals, and all data and code are
-public.
+The reference comes from the waveform recorded alongside the numbers and never replaces monitor
+values; the protocol was frozen after a permuted dry run, and all data and code are public.
 
 Limitations:
 
-- **The equivalence verdict rests on few patients.** It rests on 33 discordant patients and
-  would not have survived two AKI cases among them. It may not transfer to cohorts with more
-  artefact or a stronger association.
+- **The equivalence verdict rests on few patients** (33 discordant) and would not have survived
+  two AKI cases among them. It may not transfer to cohorts with more artefact or a stronger
+  association.
 
 - **No human rater adjudicated the reference.** The AI rater shares its model family with the
-  classifier's designer and sees only the waveform. A 400-snippet set with a hidden key is
-  released for human adjudication; it should show the monitor value as well.
+  classifier's designer; a 400-snippet set with a hidden key is released for human raters.
 
-- **The reference is *waveform-screened*, not error-free.** The classifier cannot see:
-  - levelling errors and zero drift, about 7 mmHg per 10 cm, which matter in lateral and
-    tilted positions;
+- **The reference is waveform-screened, not error-free.** The classifier cannot see levelling
+  errors and zero drift (about 7 mmHg per 10 cm), most over-damping, partial occlusion or very
+  short flushes, and 28% of deep "physiological" episodes had a cuff MAP ≥ 70 mmHg nearby.
 
-  - most over-damping;
-  - partial occlusion;
-  - very short flushes.
+- **AKI was defined by creatinine alone**, without urine output; postoperative creatinine
+  testing varied by department, and end-tidal carbon dioxide and vasopressor data were not
+  examined around deep episodes.
 
-  It also misses some artefact: 28% of deep "physiological" episodes had a cuff MAP ≥ 70 mmHg
-  nearby.
+- **Much post-induction hypotension was missed**, because monitoring started a median of 10 min
+  after the start of anaesthesia [22].
 
-- **No end-tidal carbon dioxide or vasopressor data.** We did not examine these around deep
-  episodes.
-
-- **Much post-induction hypotension was missed.** Monitoring started a median of 10 min after
-  the start of anaesthesia [22].
-
-- **One centre, few events.** The data come from a single centre in 2016–2017, mainly general
-  and thoracic surgery, with 3.6% AKI by creatinine alone. Postoperative creatinine testing
-  varied by department.
-
-- **Adjustment.** The adjusted odds ratios depend on adjustment for anaesthesia duration,
-  which partly removes cumulative exposure.
-
-- **Simulated charting.** Charted resolutions were simulated, not taken from real
-  records [6].
-
-- **Practice-dependent frequencies.** Artefact frequencies depend on local practice. The
-  mechanisms, and the direction of the resolution and smoothing effects, should transfer.
+- **One centre, few events** (2016–2017, mainly general and thoracic surgery, 3.6% AKI), with
+  adjusted odds ratios that depend on adjustment for anaesthesia duration. Charted resolutions
+  were simulated, not taken from real records [6], and artefact frequencies depend on local
+  practice, although the mechanisms should transfer.
 
 ## Conclusions
 
@@ -814,85 +488,7 @@ Running-median smoothing and unfiltered area-based exposures distort measured hy
 Brief, very deep recorded falls are often artefact in retrospect, but a sudden fall should
 prompt a look at the waveform, never a delay in treatment.
 
-# Declarations
 
-**Ethics.** This is a secondary analysis of the de-identified, publicly released VitalDB
-dataset. The acquisition and public release of the data were approved by the Institutional
-Review Board of Seoul National University Hospital (H-1408-101-605), which waived written
-informed consent because the data are anonymous [18]. No further ethics approval or
-consent was required for this analysis.
-
-**Funding.** None.
-
-**Competing interests.** None declared.
-
-**Data and code availability.** VitalDB is openly available at https://vitaldb.net. The
-analysis code, the frozen protocol with all amendments, the permuted dry run, aggregate
-results and the 400-snippet adjudication set are available at
-https://github.com/olegtropinin/ioh-artifact-study (archived at Zenodo,
-https://doi.org/10.5281/zenodo.23726000). The
-adjudication key is available from the author on request, to preserve blinding of future
-raters.
-
-**Use of artificial intelligence.** The author used an AI system (Claude Opus 5.5, Anthropic) for
-substantial parts of this work, under the author's direction:
-
-- writing the analysis code;
-- an adversarial review of the methods before the protocol was frozen;
-- three simulated peer reviews of the draft (statistical, clinical, signal processing), which
-  led to the post-unblinding changes listed in the Supplementary Protocol;
-
-- drafting the manuscript.
-
-An instance of the same AI system was also used as the blinded secondary rater of waveform
-snippets, as described in the Methods. The author checked the code, outputs and text, and
-takes full responsibility for the content. The AI system is not an author.
-
-**Author contribution.** O.T. conceived and designed the study, performed the analysis,
-interpreted the results and wrote the manuscript.
-
-**Acknowledgements.** The author thanks the VitalDB team at Seoul National University
-Hospital for making the dataset openly available.
-
-# Figure legends
-
-**Figure 1.** Recorded hypotension that is waveform-flagged artefact. Each panel shows the
-500 Hz arterial waveform (grey) and the lag-aligned 2-s monitor MAP (orange) around the start
-of a recorded MAP below 65 mmHg (time 0). Shaded windows are labelled artefact or guard. From
-top to bottom:
-
-- a transducer open to air (zeroing);
-- a stopcock turned off to the patient during blood sampling;
-- a fast flush followed by recovery;
-- a non-pulsatile trace with a cuff reading within 3 min.
-
-**Figure 2.** Arterial artefact around non-invasive cuff measurements, by artefact type. The
-plot shows the percentage of 2-s arterial windows with each label, by time relative to the
-moment a new cuff value appears (14,307 readings with a complete −300 to +30 s window).
-
-**Figure 3.** Spurious minutes among recorded minutes with MAP below 65 mmHg, by filter and
-resolution: R1, 2-s stream; R2, one value per minute; R3, 1-min median. Orange: spurious
-(reference ≥ 65 mmHg), with patient-cluster bootstrap 95% CI. Blue: indeterminate (no valid
-reference), never counted as artefact.
-
-**Figure 4.** Ratio of odds ratios for AKI (≥ 10 min below 65 mmHg) for every filter ×
-resolution combination, each against the reference at the same resolution.
-
-- Points: ratio of odds ratios.
-- Thin lines: 95% CI, log ROR ± 1.96 × max(bootstrap SE, permutation-null SD).
-- Wide bands: simultaneous 95% bands over 35 cells.
-- Grey: equivalence margin 0.80–1.25.
-
-**Figure S1.** Flow of patients.
-
-**Figure S2.** Specification curve: ratios of odds ratios for all 420 pipeline
-specifications, sorted. The lower panel marks the filter, resolution and threshold.
-
-**Figure S3.** Probability that a recorded episode is waveform-flagged, by final duration and
-nadir (the data of Table 2).
-
-**Figure S4.** Ratio of odds ratios at the 1-min median resolution by filter, exposure metric
-and threshold (post hoc display). Orange: ROR < 1; blue: ROR > 1.
 
 # References
 
@@ -928,6 +524,48 @@ and threshold (post hoc display). Orange: ROR < 1; blue: ROR > 1.
 30. Liu Z, Zhuang Z, Wang S, Xu X, Wu E, Ma F, et al. Intraoperative cuff–arterial pressure discordance and postoperative creatinine doubling: a retrospective MOVER cohort study [Preprint]. Research Square. 2026. doi:10.21203/rs.3.rs-11148992/v1
 31. Maleczek M, Laxar D, Kapral L, Kuhrn M, Abulesz YT, Dibiasi C, et al. A comparison of five algorithmic methods and machine learning pattern recognition for artifact detection in electronic records of five different vital signs: a retrospective analysis. Anesthesiology. 2024;141(1):32-43. doi:10.1097/ALN.0000000000004971
 32. Bergmann T, Vakitbilir N, Nemoga-Stout X, Sainbhi AS, Stein KY, Silvaggio N, et al. Artifact management methodologies for arterial blood pressure signals: a systematic scoping review of human and animal literature. Physiol Rep. 2025;13(19):e70533. doi:10.14814/phy2.70533
+
+# Statements and Declarations
+
+**Funding.** No funding was received for conducting this study.
+
+**Competing interests.** The author has no relevant financial or non-financial interests to
+disclose.
+
+**Ethics approval.** This is a secondary analysis of the de-identified, publicly released
+VitalDB dataset. The acquisition and public release of the data were approved by the
+Institutional Review Board of Seoul National University Hospital (H-1408-101-605) [18]. No
+further ethics approval was required for this analysis.
+
+**Consent to participate.** Written informed consent was waived by the same board because the
+data are anonymous.
+
+**Consent to publish.** Not applicable: no individual person's data that could identify them
+are reported.
+
+**Data and code availability.** VitalDB is openly available at https://vitaldb.net. The
+analysis code, the frozen protocol with all amendments, the permuted dry run, aggregate
+results and the 400-snippet adjudication set are available at
+https://github.com/olegtropinin/ioh-artifact-study (archived at Zenodo,
+https://doi.org/10.5281/zenodo.23726000). The adjudication key is available from the author on
+request, to preserve blinding of future raters.
+
+**Use of artificial intelligence.** The author used an AI system (Claude Opus 5.5, Anthropic) for
+substantial parts of this work, under the author's direction: writing the analysis code; an
+adversarial review of the methods before the protocol was frozen; three simulated peer reviews
+of the draft (statistical, clinical, signal processing), which led to the post-unblinding
+changes listed in the protocol in Online Resource 1; drafting the manuscript; and, as a
+separate instance, blinded secondary rating of waveform snippets. The author checked the code,
+outputs and text, and takes full responsibility for the content. The AI system is not an
+author.
+
+**Author contribution.** O.T. conceived and designed the study, performed the analysis,
+interpreted the results and wrote the manuscript.
+
+**Acknowledgements.** The author thanks the VitalDB team at Seoul National University
+Hospital for making the dataset openly available.
+
+
 
 ## Table 1. Patient characteristics
 
@@ -1007,12 +645,37 @@ Episode: contiguous run of monitor MAP < 65 mmHg. Cells: % flagged (patient-clus
 
 F, filter: F0 none; F1 MAP 20–250; F2 MAP 30–200; F3 Jacobsson rule; F4 physiological consistency; F5 F4 + neighbour rule; F6 F4 + 7-point running median. R, resolution: R1 2-s stream; R2 one instantaneous value per minute; R3 1-min median; R4 5-min chart; R5 15-min chart. P / R, pipeline / reference. Spurious: pipeline minute < 65 mmHg with reference ≥ 65. Masked: share of reference minutes < 65 that the pipeline records ≥ 65; neither is defined for charted resolutions. Exposure: ≥ 10 min with MAP < 65 mmHg; exposure prevalence and κ from the descriptive cohort (charted resolutions at phase offset 0). ROR (ratio of odds ratios, pipeline / reference at matched resolution) from the AKI set; 95% CI = log ROR ± 1.96 × max(paired-bootstrap SE, permutation-null SD); simultaneous band: bootstrap max-|z| critical value over all 35 cells applied to the same SE.
 
+# Figure legends
+
+**Fig. 1** Recorded hypotension that is waveform-flagged artefact. Each panel shows the 500 Hz
+arterial waveform (grey) and the lag-aligned 2-s monitor MAP (orange) around the start of a
+recorded MAP below 65 mmHg (time 0). Shaded windows are labelled artefact or guard. From top to
+bottom: a transducer open to air (zeroing); a stopcock turned off to the patient during blood
+sampling; a fast flush followed by recovery; a non-pulsatile trace with a cuff reading within
+3 min
+
+**Fig. 2** Arterial artefact around non-invasive cuff measurements, by artefact type. The plot
+shows the percentage of 2-s arterial windows with each label, by time relative to the moment a
+new cuff value appears (14,307 readings with a complete −300 to +30 s window)
+
+**Fig. 3** Spurious minutes among recorded minutes with MAP below 65 mmHg, by filter and
+resolution: R1, 2-s stream; R2, one value per minute; R3, 1-min median. Orange: spurious
+(reference ≥ 65 mmHg), with patient-cluster bootstrap 95% CI. Blue: indeterminate (no valid
+reference), never counted as artefact
+
+**Fig. 4** Ratio of odds ratios for AKI (≥ 10 min below 65 mmHg) for every filter × resolution
+combination, each against the reference at the same resolution. Points: ratio of odds ratios.
+Thin lines: 95% CI, log ROR ± 1.96 × max(bootstrap SE, permutation-null SD). Wide bands:
+simultaneous 95% bands over 35 cells. Grey: equivalence margin 0.80–1.25
+
+Legends of Figures S1–S4 are in Online Resource 1.
+
 # Figures
 
-![Recorded hypotension that is waveform-flagged artefact: waveform and monitor MAP.](figures/fig1_examples.png){width=100%}
+![**Fig. 1** Recorded hypotension that is waveform-flagged artefact: waveform and monitor MAP](figures/fig1_examples.png){width=100%}
 
-![Arterial artefact around non-invasive cuff measurements, by artefact type.](figures/fig5_nibp_cuff.png){width=100%}
+![**Fig. 2** Arterial artefact around non-invasive cuff measurements, by artefact type](figures/fig5_nibp_cuff.png){width=100%}
 
-![Spurious minutes among recorded minutes with MAP < 65 mmHg, by filter and resolution.](figures/fig2_spurious.png){width=100%}
+![**Fig. 3** Spurious minutes among recorded minutes with MAP < 65 mmHg, by filter and resolution](figures/fig2_spurious.png){width=100%}
 
-![Ratio of odds ratios for AKI for every filter × resolution combination.](figures/fig6_forest.png){width=100%}
+![**Fig. 4** Ratio of odds ratios for AKI for every filter × resolution combination](figures/fig6_forest.png){width=100%}

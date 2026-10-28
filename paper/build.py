@@ -12,18 +12,22 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 LANG = sys.argv[1] if len(sys.argv) > 1 else 'en'
 BRACKETS = os.environ.get('CITE', 'brackets') == 'brackets'
 SUPCAPS = {
-    'en': ['Figure S1. Flow of patients.', 'Figure S2. Specification curve of 420 pipeline specifications.',
-           'Figure S3. Probability that a recorded episode is waveform-flagged, by final duration and nadir.',
-           'Figure S4. Ratio of odds ratios by filter, exposure metric and threshold (post hoc display).'],
+    'en': ['Figure S1. Flow of patients.',
+           'Figure S2. Specification curve: ratios of odds ratios for all 420 pipeline specifications, '
+           'sorted. The lower panel marks the filter, resolution and threshold.',
+           'Figure S3. Probability that a recorded episode is waveform-flagged, by final duration and '
+           'nadir (the data of Table 2).',
+           'Figure S4. Ratio of odds ratios at the 1-min median resolution by filter, exposure metric and '
+           'threshold (post hoc display). Orange: ROR < 1; blue: ROR > 1.'],
     'ru': ['Рисунок S1. Отбор пациентов.', 'Рисунок S2. Кривая спецификаций: 420 вариантов обработки.',
            'Рисунок S3. Вероятность того, что эпизод помечен как артефакт, по длительности и минимуму.',
            'Рисунок S4. Отношение отношений шансов по фильтру, метрике и порогу (апостериорно).'],
 }
 CAPTIONS = {
-    'en': ['Recorded hypotension that is waveform-flagged artefact: waveform and monitor MAP.',
-           'Arterial artefact around non-invasive cuff measurements, by artefact type.',
-           'Spurious minutes among recorded minutes with MAP < 65 mmHg, by filter and resolution.',
-           'Ratio of odds ratios for AKI for every filter × resolution combination.'],
+    'en': ['Recorded hypotension that is waveform-flagged artefact: waveform and monitor MAP',
+           'Arterial artefact around non-invasive cuff measurements, by artefact type',
+           'Spurious minutes among recorded minutes with MAP < 65 mmHg, by filter and resolution',
+           'Ratio of odds ratios for AKI for every filter × resolution combination'],
     'ru': ['Записанная гипотония, помеченная по кривой как артефакт: кривая и САД монитора.',
            'Артефакты артериальной кривой вокруг измерений манжетой, по типам артефакта.',
            'Ложные минуты среди записанных минут с САД < 65 мм рт. ст. по фильтрам и разрешению.',
@@ -83,23 +87,37 @@ def number(text, R):
 def main():
     R = refs()
     sfx = '' if LANG == 'en' else '_ru'
+    # back matter: conclusions, then declarations and figure legends (top-level headings);
+    # Springer places the declarations after the references and the legends after the tables
+    conclusions, declarations, legends = re.split(r'(?m)^(?=# )', read(f'back{sfx}.md'))
     body = [read(f'front{sfx}.md'), read(f'intro{sfx}.md'), read(f'methods{sfx}.md'),
-            read(f'results{sfx}.md'), read(f'discussion{sfx}.md'), read(f'back{sfx}.md')]
+            read(f'results{sfx}.md'), read(f'discussion{sfx}.md'), conclusions, declarations, legends]
     text = '\n'.join(body)
     text = re.sub(r'(?m)^(?!\s*[-*] |\s*\d+\. |\s*$|\s*\|)(.+)\n(\s*(?:- |\d+\. ))', r'\1\n\n\2', text)
     text, order = number(text, R)
+    main, declarations, legends = re.split(r'(?m)^(?=# (?:Statements|Декларации|Заявления|Figure legends|Подписи))', text)
     head = '# References\n' if LANG == 'en' else '# Литература\n'
-    text += '\n' + head + '\n' + '\n'.join(f'{i}. {R[k]}' for i, k in enumerate(order, 1)) + '\n'
-    text += '\n' + read(f'tables{sfx}.md')
+    text = main + '\n' + head + '\n' + '\n'.join(f'{i}. {R[k]}' for i, k in enumerate(order, 1)) + '\n'
+    text += '\n' + declarations + '\n' + read(f'tables{sfx}.md') + '\n' + legends
     caps = CAPTIONS[LANG]
     figs = ['fig1_examples', 'fig5_nibp_cuff', 'fig2_spurious', 'fig6_forest']
     text += '\n# ' + ('Figures' if LANG == 'en' else 'Рисунки') + '\n\n'
-    text += '\n\n'.join(f'![{c}](figures/{f}{sfx}.png){{width=100%}}' for f, c in zip(figs, caps)) + '\n'
+    word = 'Fig.' if LANG == 'en' else 'Рис.'
+    text += '\n\n'.join(f'![**{word} {n}** {c}](figures/{f}{sfx}.png){{width=100%}}'
+                         for n, (f, c) in enumerate(zip(figs, caps), 1)) + '\n'
+    # the caption carries its own "Fig. <n>", so the LaTeX label is suppressed
+    text = ('---\nheader-includes: |\n  \\usepackage{caption}\n  \\captionsetup[figure]{labelformat=empty}\n---\n\n'
+            + text)
     # supplement: methods, tables, figures, protocol (citations numbered with the main list)
     # captions already carry "Figure S<n>", so the LaTeX "Figure <n>:" label is suppressed,
     # and the wide supplementary tables are set in a smaller font
     sup = ('---\nheader-includes: |\n  \\usepackage{caption}\n  \\captionsetup[figure]{labelformat=empty}\n'
            '  \\usepackage{etoolbox}\n  \\AtBeginEnvironment{longtable}{\\small\\setlength{\\tabcolsep}{3pt}}\n---\n\n'
+           + ('**Online Resource 1** to "' if LANG == 'en' else '**Электронное приложение 1** к статье «')
+           + re.search(r'title: "(.*)"', read(f'front{sfx}.md')).group(1)
+           + ('" (Oleg Tropynin). Supplementary methods S1–S7, Tables S1–S11, Figures S1–S4 and the '
+              'analysis protocol.\n\n' if LANG == 'en' else '» (Oleg Tropynin). Дополнительные методы '
+              'S1–S7, таблицы S1–S11, рисунки S1–S4 и протокол анализа.\n\n')
            + read(f'supp_methods{sfx}.md') + '\n' + read(f'supplement_tables{sfx}.md'))
     sup += '\n# ' + ('Supplementary figures' if LANG == 'en' else 'Дополнительные рисунки') + '\n\n'
     for f, cap in zip(['figS1_flow', 'fig3_spec_curve', 'fig4_episode_probability', 'fig3_depth_heatmap'],

@@ -92,3 +92,84 @@ For each episode and each elapsed time t (10, 30, 60 and 120 s), the nadir so fa
 lowest monitor MAP in the first t seconds. Episodes shorter than t were not counted at t. The
 table therefore gives the probability that an episode is flagged, given that it has lasted at
 least t seconds and reached a given nadir.
+
+## S6. Pipeline filters and sensitivity analyses
+
+Filters were applied to the 2-s monitor numerics (F5 and F6 after sampling, on the pipeline's
+own grid):
+- F0: none;
+- F1: MAP below 20 or above 250 mmHg removed;[@leesb]
+- F2: MAP below 30 or above 200 mmHg removed;[@khan]
+- F3: systolic above 250, diastolic below 15, MAP below 35 or above 150, or pulse pressure
+  below 15 mmHg removed;[@jacobsson]
+- F4: physiological consistency (MAP below 20 or above 200; systolic below 20 or above 300;
+  systolic ≤ diastolic; pulse pressure below 5; diastolic below 5);
+- F5: F4, then removal of values that differ from both neighbours by more than 30 mmHg;[@du]
+- F6: F4, then a 7-point running median.[@pasma2020]
+
+The *noise* label also requires a median absolute second difference of the waveform of at
+least 4 mmHg; the *zero* range is the 2nd–98th centile range; an upstroke is a rise of more
+than 8 mmHg within 100 ms.
+
+Pre-specified sensitivity analyses varied the reference (guard length 0 s and 6/30 s,
+pulse-pressure threshold 5 and 12 mmHg, minute validity 25% and 75%, no bridging, and the
+waveform mean in place of the monitor value), the monitoring period (defined from the numerics),
+the adjustment set (blood loss; number of postoperative creatinine measurements) and the
+outcome (AKI stage ≥ 2; missing postoperative creatinine counted as no AKI, S4;
+transplantation included, S6).
+
+## S7. Further results
+
+**Inclusion in the AKI set by department** (non-transplant patients of the descriptive cohort):
+thoracic 96%, urology 97%, general surgery 85%, gynaecology 28%.
+
+**Artefact events.** Guard margins were 1.4% of windows. Inside the monitoring period the
+waveform was never missing: the analogue channel records continuously, and the period is
+bounded by valid data. In valid windows, monitor MAP and the waveform mean differed by more
+than 10 mmHg in a median of 0.5% of windows per patient.
+
+| Artefact type | Patients with at least one event | Events per monitored hour |
+|---|---|---|
+| Flush | 98% | 2.6 |
+| Noise | 97% | 2.7 |
+| Non-pulsatile run | 90% | 2.0 |
+| Zeroing | 33% | 0.2 |
+
+**Cuff cycle.** At the peak, 22 s before a new cuff value, 25.8% of arterial windows were
+artefact, against 4.3% 4–5 min earlier; flush labels barely rose (2.3% against 1.7%). The 4.3%
+baseline is above the 1.8% seen at other times because it includes the previous cuff cycle.
+Post hoc, the excess was present at regularly cycled readings (12.2% of windows), which are
+probably automatic, as well as at irregular ones (17.0%). In 60% of patients with a right and
+31% with a left radial catheter, at least 10% of arterial windows in the minute before cuff
+readings were artefact.
+
+**Episodes.** Of 106,725 recorded episodes, 3,909 (3.7%) were guard-dominated and 94,345
+(88.4%) physiological. Flagged proportions were 59–65% for episodes lasting ≤ 30 s with a nadir
+of 40–54 mmHg.
+
+**Pulse.** An ECG rate alone cannot exclude pulseless electrical activity. A plethysmographic
+pulse was present in deep flagged and deep physiological episodes alike (98% and 97.5% of
+windows). The non-pulsatile fraction was 0.17% in the 13 patients with preoperative atrial
+fibrillation and 0.68% in the others.
+
+**Injection–recovery.** Short flushes of 200 mmHg or less were rarely detected; partial
+occlusion was detected only when severe (Table S8).
+
+**Association with AKI.** For ≥ 10 min below 55 mmHg the reference odds ratio was 1.95
+(0.89–4.27), and per 10 min below 65 mmHg 1.08 (0.99–1.17); the pipeline slope was 1.09
+(1.00–1.18), a difference in log-odds of 0.007 (−0.005 to 0.019). Four of the 35 filter ×
+resolution cells at R2 lay within 0.002 of the upper margin, two on each side; excluding F6,
+point estimates ranged from 0.94 to 1.12, and the resolution effect on the reference had
+intervals from 0.76 to 1.42. The interval for the odds ratio excluded 1 in 181 of 420 pipeline
+specifications and in 33 of 105 reference specifications.
+
+**Sensitivity analyses.** The 14 equivalent analyses had intervals within 0.83–1.10 and
+included the exclusion of gynaecology and adjustment for a disease-risk score. Adjustment for
+blood loss and for the number of creatinine measurements, and AKI stage ≥ 2, gave point
+estimates of 0.95–0.97 without intervals; the creatinine count follows surgery and is
+exploratory. The waveform-mean reference changes calibration as well as cleaning, so it does
+not isolate artefact handling, and a real difference cannot be excluded.
+
+**Differential misclassification.** Spurious hypotension was weakly and inversely correlated
+with ASA class (ρ −0.06, p = 0.006). The odds ratio per unit of log(1 + minutes per hour) was
+0.59 (0.12–2.86). The negative control fitted separately gave 1.16 (0.95–1.42) per SD.

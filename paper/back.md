@@ -13,9 +13,10 @@ prompt a look at the waveform, never a delay in treatment.
 # Declarations
 
 **Ethics.** This is a secondary analysis of the de-identified, publicly released VitalDB
-dataset. Collection of the data was approved by the institutional review board of Seoul
-National University Hospital, as described in the data descriptor.[@vitaldb] No further
-approval or consent was required.
+dataset. The acquisition and public release of the data were approved by the Institutional
+Review Board of Seoul National University Hospital (H-1408-101-605), which waived written
+informed consent because the data are anonymous.[@vitaldb] No further ethics approval or
+consent was required for this analysis.
 
 **Funding.** None.
 

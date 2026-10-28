@@ -4,7 +4,7 @@ title: "How much recorded intraoperative hypotension is arterial-line artefact, 
 
 **Running title:** Arterial-line artefact and intraoperative hypotension
 
-**Author:** Oleg Tropynin
+**Author:** Oleg Tropynin (ORCID 0009-0006-5431-4285)
 
 **Affiliation:** Independent researcher, Karaganda, Kazakhstan
 
@@ -817,9 +817,10 @@ prompt a look at the waveform, never a delay in treatment.
 # Declarations
 
 **Ethics.** This is a secondary analysis of the de-identified, publicly released VitalDB
-dataset. Collection of the data was approved by the institutional review board of Seoul
-National University Hospital, as described in the data descriptor [18]. No further
-approval or consent was required.
+dataset. The acquisition and public release of the data were approved by the Institutional
+Review Board of Seoul National University Hospital (H-1408-101-605), which waived written
+informed consent because the data are anonymous [18]. No further ethics approval or
+consent was required for this analysis.
 
 **Funding.** None.
 

@@ -4,7 +4,7 @@ title: "How much recorded intraoperative hypotension is arterial-line artefact, 
 
 **Running title:** Arterial-line artefact and intraoperative hypotension
 
-**Author:** Oleg Tropynin
+**Author:** Oleg Tropynin (ORCID 0009-0006-5431-4285)
 
 **Affiliation:** Independent researcher, Karaganda, Kazakhstan
 
